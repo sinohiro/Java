@@ -1,0 +1,188 @@
+4J 21番 篠田 裕人 テーマ05 レポート
+
+2019/5/28 追記:実行結果が不足していたので追記しました
+
+1. ベクトルの足し算
+ソースコード:Vector2D.java
+Vector2D(){
+    this.x = 0;
+    this.y = 0;
+}
+
+void add(Vector2D b){
+    this.x += b.x;
+    this.y += b.y;
+}
+
+static Vector2D add(Vector2D a, Vector2D b){
+    Vector2D d = new Vector2D();
+    d.x = a.x + b.x;
+    d.y = a.y + b.y;
+    return d;
+}
+
+ソースコード:Vector2DApp.java
+class Vector2DApp{
+    public static void main(String args[]){
+	Vector2D a = new Vector2D(3.14, 2.17);
+	Vector2D b = new Vector2D(1.14, 5.14);
+	Vector2D c = Vector2D.add(a, b); 
+
+	System.out.println("2つのベクトルの和は");
+	c.print();
+
+	System.exit(0);
+    }   
+}
+
+実行結果
+p160101@java35:~/javalang/java-0513$ java Vector2DApp
+2つのベクトルの和は
+x=4.28y=7.31
+
+動作説明
+a,bベクトルの値をstatic Vector2D addに渡し
+中の値が0で初期化された新しいインスタンスに計算された値を入れ
+その値をmeinにreturnし,print()メソッドで表示している
+
+2. ベクトルの引き算
+ソースコード:Vector2D.java
+static Vector2D subtract(Vector2D a, Vector2D b){
+    Vector2D dd = new Vector2D();
+    dd.x = a.x - b.x;
+    dd.y = a.y - b.y;
+    return dd;
+}
+
+ソースコード:Vector2DApp.java
+class Vector2DApp{
+    public static void main(String args[]){
+	Vector2D a = new Vector2D(3.14, 2.17);
+	Vector2D b = new Vector2D(1.14, 5.14);
+	Vector2D c = Vector2D.add(a, b);
+	Vector2D d = Vector2D.subtract(a, b);
+
+	System.out.println("aベクトルは");
+	a.print();
+	System.out.println("bベクトルは");
+	b.print();
+	System.out.println("2つのベクトルの和は");
+	c.print();
+	System.out.println("2つのベクトルの差は");
+	d.print();                                                                              
+
+	System.exit(0);
+    }   
+}
+
+実行結果
+p160101@java35:~/javalang/java-0513$ java Vector2DApp
+aベクトルは
+x=3.14y=2.17
+bベクトルは
+x=1.14y=5.14
+2つのベクトルの和は
+x=4.28y=7.31
+2つのベクトルの差は
+x=2.0y=-2.9699999999999998
+
+動作説明
+a,bベクトルの値をstatic Vector2D subtractに渡し
+中の値が0で初期化された新しいインスタンスに計算された値を入れ
+その値をmeinにreturnし,print()メソッドで表示している
+
+3. ベクトルの距離計算
+ソースコード:Vector2DApp.java
+class Vector2DApp{
+    public static void main(String args[]){
+	Vector2D a = new Vector2D(3.14, 2.17);
+	Vector2D b = new Vector2D(1.14, 5.14);
+	Vector2D c = Vector2D.add(a, b); 
+	Vector2D d = Vector2D.subtract(a, b); 
+	double e = Vector2D.calcDistance(a, b); 
+
+	System.out.println("aベクトルは");
+	a.print();
+	System.out.println("bベクトルは");
+	b.print();
+	System.out.println("2つのベクトルの和は");
+	c.print();
+	System.out.println("2つのベクトルの差は");
+	d.print();
+	System.out.println("2つのベクトルの距離は");
+	System.out.println(e);                                                   
+
+
+	System.exit(0);
+    }
+}
+
+ソースコード:Vector2D.java
+static double calcDistance(Vector2D a, Vector2D b){ 
+    a = subtract(a, b); 
+    double ee = a.calcNorm();
+    return ee;                                                              
+}
+
+実行結果
+p160101@java35:~/javalang/java-0513$ java Vector2DApp
+aベクトルは
+x=3.14y=2.17
+bベクトルは
+x=1.14y=5.14
+2つのベクトルの和は
+x=4.28y=7.31
+2つのベクトルの差は
+x=2.0y=-2.9699999999999998
+2つのベクトルの距離は
+3.5806284364619567
+
+動作説明
+ベクトルa, bをcalcDistanceに与え、2つのベクトルを引き算した
+値をcalcNormで計算し、その値をmeinに返して表示している
+
+4. staticを外す
+ソースコード:Vector2DApp.java
+class Vector2DApp{                                                              
+    public static void main(String args[]){
+	Vector2D a = new Vector2D(3.14, 2.17);
+	Vector2D b = new Vector2D(1.14, 5.14);
+	Vector2D c = Vector2D.add(a, b); 
+	Vector2D d = Vector2D.subtract(a, b); 
+	double e = a.calcDistance(a, b); 
+
+	System.out.println("aベクトルは");
+	a.print();
+	System.out.println("bベクトルは");
+	b.print();
+	System.out.println("2つのベクトルの和は");
+	c.print();
+	System.out.println("2つのベクトルの差は");
+	d.print();
+	System.out.println("2つのベクトルの距離は");
+	System.out.println(e);
+
+
+	System.exit(0);
+    }   
+}
+ソースコード:Vector2D.java
+double calcDistance(Vector2D a, Vector2D b){
+    a = subtract(a, b);
+    double ee = a.calcNorm();
+    return ee;
+}
+
+レポート
+具体例は上にはったソースコードです
+問題点はVector2D型を作ったのに使っていないことで
+無駄にメモリを使っていることになっている
+さらにmain関数との値の行き来が複雑になり理解しにくいプログラムになっている
+
+5. 
+[staticメソッド]だと思います
+理由:
+通常メソッドだとデータの入力をオブジェクト変数を通して
+いれなくてはならない
+この場合、使う人にとっては使いにくいので値を直接入れられるstaticメソッドで
+かかれていると思われる

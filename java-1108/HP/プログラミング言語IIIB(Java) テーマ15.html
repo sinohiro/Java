@@ -1,0 +1,254 @@
+<!--?xml version="1.0" encoding="utf-8"?-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>プログラミング言語IIIB(Java) テーマ15</title>
+<link rel="stylesheet" href="%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9EIIIB(Java)%20%E3%83%86%E3%83%BC%E3%83%9E15_files/tenmo2008single.css" type="text/css" media="all">
+</head>
+
+<body>
+
+<h2>プログラミング言語IIIB(Java) テーマ15</h2>
+
+<h3>イベント処理</h3>
+
+<p>「ボタンが押された」「テキストが入力された」「マウスが動いた」「マウスのボタンが押された」「キーが押された」等, ユーザーが何らかの<em>操作</em>を行ったタイミングで, それに即時<em>反応</em>する(=プログラムを動作させる)ための仕組みがイベント処理機構である.</p>
+
+<p>※なお, ユーザーが操作しなくても一定時間毎に自動で動作させるための仕組みがタイマーである. →テーマ18にて</p>
+
+<p>ここで, 発生した事象を<em>イベント</em>(Event), そのイベントを発生させたGUI部品を<em>イベントソース</em>(Event Source), そのイベントを処理するインスタンスを<em>イベントリスナー</em>(Event Listener)と呼ぶ. <em>予め</em>イベントソースに対してイベントリスナーを<em>登録</em>しておくことによって, イベントが発生したタイミングで, イベントリスナーを<em>呼び出してもらう</em>事が可能となる.</p>
+
+<center>
+<img src="%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9EIIIB(Java)%20%E3%83%86%E3%83%BC%E3%83%9E15_files/event.png"><br>
+図: イベントが発生した時に, そのイベントが, イベントリスナーに伝えられる(=呼び出される). 
+</center>
+
+<p>これまでに作成してきたボタン処理プログラムでは, <em>ボタン</em>がイベントソースで<code class="em">this</code>がイベントリスナーとなっていた. ボタンに対してあらかじめ「このボタンが押されたら<code>this</code>が処理するので呼び出してください」と登録しておくことによって, 画面上のボタンが押された時に, <code>this</code>の<code>actionPerformed</code>が呼び出される.</p>
+
+<p>※<code>this</code>ではない別のインスタンスをイベントリスナーにすることも, 可能ではある, が, この授業では扱わない.</p>
+
+<pre>public class EventExample extends JFrame implements ActionListener
+{
+    private JButton b1;
+    public EventExample()
+    {
+        this.b1 = new JButton("***緊急停止ボタン***");
+        this.b1.addActionListener(this);
+        // ↑thisがイベントソースthis.b1のイベントリスナーになることを宣言する. 
+        getContentPane().add(this.b1);
+    }
+    public void actionPerformed(ActionEvent e) // eにはイベントに関する情報が入っている.
+    {
+        if (e.getSource() == this.b1) // イベントソースがthis.b1だったら,
+        {
+            System.exit(0); // b1に応じた処理を行う. (ここでは例として実行終了)
+        }
+    }
+}
+</pre>
+
+<p>イベントには<code>ActionEvent</code>の他にも様々なものがあり, それぞれ対応するイベントリスナーのインターフェースの名前と, 呼び出されるメソッドの名前が<em>決まって</em>いる. 以下に主なイベントを挙げる. <em>スペル</em>や<em>大文字・小文字</em>の違いには良く注意すること.</p>
+
+<center>
+<table>
+<tbody><tr><th>操作例</th><th>イベント型</th><th>リスナー名</th><th>メソッド名</th></tr>
+<tr><td>画面上のボタンが押された,<br>テキストが入力された</td>
+    <td><code>ActionEvent</code></td>
+    <td><code>ActionListener</code></td>
+    <td><code>actionPerformed</code></td></tr>
+<tr><td>マウスが動いた,<br>マウスボタンが押された</td>
+    <td><code>MouseEvent</code></td>
+    <td><code>MouseListener</code></td>
+    <td><code>mouseClicked</code>等</td></tr>
+<tr><td>キーが押された,<br>キーが離された</td>
+    <td><code>KeyEvent</code></td>
+    <td><code>KeyListener</code></td>
+    <td><code>keyPressed</code>等</td></tr>
+<tr><td>スライダーが動いた</td>
+    <td><code>ChangeEvent</code></td>
+    <td><code>ChangeListener</code></td>
+    <td><code>stateChanged</code></td></tr>
+<tr><td>ウィンドウが消された,<br>ウィンドウが最小化された</td>
+    <td><code>WindowEvent</code></td>
+    <td><code>WindowListener</code></td>
+    <td><code>windowClosed</code>等</td></tr>
+</tbody></table>
+</center>
+
+<p>なお, 一つのインスタンスが複数の種類のイベントリスナーになることも可能である. 以下に<code>ActionEvent</code>と<code>ChangeEvent</code>の両方を処理するクラスの例を示す.</p>
+
+<pre>public class EventExample extends JFrame
+                          implements ActionListener, ChangeListener
+                          // 複数のリスナー名をカンマで区切って並べる.
+{
+    // イベント処理メソッドを複数書く.
+    public void actionPerformed(ActionEvent e)
+    {
+        // ボタン操作によるActionEventを処理するコード
+    }
+    public void stateChanged(ChangeEvent e)
+    {
+        // スライダー操作によるChangeEventを処理するコード
+    }
+}
+</pre>
+
+<h3><code>JTextField</code>クラス</h3>
+
+<p><em>1行</em>の文字列入力欄であり, 「入力欄の大きさ(文字単位)」を引数に指定して, <code>new</code>で生成する. ユーザーに短いテキストデータを入力させる場合に用いる. 文字列を入れてEnterキーを押すと, イベントリスナーに<code class="em">ActionEvent</code>が送られる. また, 入力用途のみではなく, <code>JLabel</code>の様に, 処理結果などの文字列表示にも利用できる.</p>
+
+<p>※ここで「Enterが押された」というイベントは, KeyEventではなく, ActionEventであることに注意!</p>
+
+<!-- <p>(<a href="http://www.info.kushiro-ct.ac.jp/~futaya/doc/jdk-1_5_0-doc-ja/docs/ja/api/index.html">API仕様</a>にて, コンストラクタ, <code>getText</code>メソッド, <code>setText</code>メソッド等を各自で調査)</p> -->
+
+<pre>// フィールドで
+private JTextField tf1;
+// コンストラクタで
+this.tf1 = new JTextField(10); // 10は欄の大きさ(文字数)
+// actionPerformedで
+String s = this.tf1.getText(); // 欄からテキストデータを取り出す. 必要ならセットも可能.
+</pre>
+
+<h3><code>JTextArea</code>クラス</h3>
+
+<p><em>複数行</em>に渡る長い文字列を表示/入力/編集できるGUI部品である. 「縦と横の大きさ(文字単位)」を指定して, <code>new</code>で生成し, ウィンドウ上に配置すると, 自由にカーソル移動や文字入力のできる領域ができあがる.</p>
+
+<pre>// フィールドで
+private JTextArea ta1;
+// コンストラクタで
+this.ta1 = new JTextArea(10, 20);
+</pre>
+
+<h3>ファイルの読込み</h3>
+
+<p>読み込みたいファイルの名前を与えて<code class="em">FileReader</code>クラスのインスタンスを生成し, それを<code class="em">BufferedReader</code>クラスのインスタンスで包む.</p>
+
+<p>その後, <code>BufferedReader</code>クラスの<code class="em">readLine</code>メソッドで, ファイルの内容を1行ずつ読み込んでいく. <code>readLine</code>メソッドはファイルの最後に到達すると<code>null</code>を返すので, 戻り値が<code>null</code>になったらループを終了する.</p>
+
+<p>最後に<code class="em">close</code>メソッドでファイルを閉じる.</p>
+
+<p>※<code>FileReader</code>クラスはファイルからの<em>1文字単位</em>での読込みを担当し, <code>BufferedReader</code>クラスはそれを<em>バッファリング</em>して1行ごとにまとめて読み込む, というように役割分担がなされている.</p>
+
+<p>なお, <code class="em">try &amp; catch</code>による例外処理機構については前期のJava言語の学習では扱っていないが, エラー処理の定石(パターン)として, 以下の例を真似て利用してみて欲しい. <code class="em">try</code>ブロック中で実行時エラー(ファイルが無い, ファイルが壊れている, 開く権限が無い等)が発生すると, <code class="em">catch</code>ブロックが実行される仕組みになっている.</p>
+
+<pre>import java.io.*; // 追加
+
+// ----ファイルを読み込みたいメソッドの中で----
+try
+{
+    FileReader fr = new FileReader("test.txt"); // ファイルを開く.
+    BufferedReader br = new BufferedReader(fr);
+    String buf;
+    while ((buf = br.readLine()) != null) // 1行読み込み, それがnullでなければ,
+    {
+        System.out.println(buf); // bufを処理する(この例では表示するだけ).
+    }
+    br.close();
+    fr.close(); // ファイルを閉じる.
+}
+catch (IOException e) // もしエラーが起きたら,
+{
+    System.out.println("ファイル読み込みエラー");
+    System.exit(1); // 実行終了
+}
+</pre>
+
+<h3>ファイルの書込み</h3>
+
+<p>基本的な構成は読込みと同様である. <code class="em">FileWriter</code>クラスのインスタンスを<code class="em">BufferedWriter</code>クラスのインスタンスで包み, <code class="em">write</code>メソッドでファイルに文字列を書き込む. 最後に<code>close</code>メソッドでファイルを閉じる. エラー処理の方法も読込みと同様である.</p>
+
+<pre>FileWriter fw = new FileWriter("test.txt"); // ファイルを開く.
+BufferedWriter bw = new BufferedWriter(fw);
+bw.write("カキコ");                         // ファイルに書き込む.
+bw.close();
+fw.close();                                 // ファイルを閉じる.
+</pre>
+
+<p>この様に, Javaでのファイル入出力は, バッファとなる配列の用意やポインタ操作, バッファオーバーフローへの配慮が不要なため, C言語での<code>fopen, fgets</code>等を用いたファイル入出力よりも, 遥かに扱いが容易, かつ, 安全である.</p>
+
+<p>また, ここで紹介した<code>FileReader</code>等の他にも画像ファイル(GIF, JPEG, PNG等)の入出力や, 
+URL指定によるネットワーク経由でのファイル取得, インスタンスのファイルへの保存と復元(シリアライズ機能)など, 
+C言語と比べて近代的な機能が標準で多数用意されているので, 興味があればぜひ挑戦して欲しい.</p>
+
+<h3>課題</h3>
+
+<p>以下の課題のレポートは, レポートファイル<code class="em">report15.txt</code>を作成してアップロードにより提出すること. レポートファイルの1行目には<em>出席番号・名前・回</em>を忘れずに記入すること.</p>
+
+<ol>
+
+<li>[練習] コマンドライン引数(<code>args[0]</code>)でファイル名を与えると, そのファイルを読み込み, そのまま端末ウィンドウ上(標準出力)に表示するプログラムを作成せよ. <code>main</code>のみで作成して良い. (ソースをレポート)</li>
+
+<p>※GUIプログラムではなく, 前期に作成した様な, 端末ウィンドウ上で動作するキャラクタベースのプログラムである. 前期を思い出して欲しい.</p>
+
+<p>※GUIプログラム「ではない」ので, <code>JFrame</code>, <code>implements</code>, <code>getContentPane()</code>, <code>actionPerformed()</code>などは一切不要である.</p>
+
+<pre>import java.io.*; インポートはプログラムの最初
+public class CatTest
+{
+    public static void main(String[] args) { いきなり main を書く.
+        課題ページのファイル読み込みコードをコピペして
+        ファイル名の箇所を args[0] に変更.
+        ※ただし, ダブルクォートを付けて "args[0]" と書いたら残念な結果になるので注意.
+    }
+}
+</pre>
+
+<pre>実行方法
+$ java CatTest 自作の動作テスト用ファイル
+</pre>
+
+  <p>※今回のテーマでは, 自分のソースファイルは動作テストに使わない方が安全である(特に書き込み時).</p>
+
+<li><em>ファイル名</em>を入力する欄, ファイルを<em>開く</em>ボタン, ファイルの<em>内容</em>を表示するテキストエリアから成るGUIプログラムを作成せよ. なお, 各GUI部品の配置は各自のセンスで自由に決めて良い. (ソース, ユーザー向け解説, 開発者向け解説を記入して提出)</li>
+
+<p>ヒント: まずハリボテを作ると良い. <code>JTextField</code>, <code>JButton</code>, <code>JTextArea</code>をウィンドウ内に配置する. 表示確認後, イベント処理を書いていく.</p>
+
+<pre>JButton が押されたときに,
+  JTextField から getText でファイル名を取り出し,
+  そのファイルを開き,
+  そのファイルの中身を全て読み込んで長い文字列を作成し, ※下記ヒント参照
+  その長い文字列を JTextArea にセットする.
+</pre>
+
+<p>ヒント: 複数行のファイルを読み込んでテキストエリアに表示するには, 1行読み込むごとに改行コードを挿入する必要がある. 
+Java的に正式な改行文字を得るには下記の様にプロパティを使う. これを各行に対して繰り返して長大な文字列を作り, 
+最後に一度だけテキストエリアにセットする.</p>
+<pre>// 読込みのwhileループの前に, 文字列allを用意しておく. 中身は空.
+
+// そうしておいて, ループの中で,
+all += buf;                                  // 1行分の文字列をallに追加
+all += System.getProperty("line.separator"); // 改行文字をallに追加
+
+// ループ終了後, テキストエリアにsetText()する.
+</pre>
+
+<li>課題2のプログラムに, さらに<em>保存</em>ボタンを追加し, ファイルを読み込んで編集し, 再びファイルに書き出せるプログラム(エディタ)を作成せよ. (<em>保存機能に関する部分</em>のソース, <em>保存機能</em>のユーザー向け解説, <em>保存機能に関する部分</em>の開発者向け解説を記入して提出)</li>
+
+<!-- <li><code>JTextField</code> + <code>JSlider</code>と同様の機能をよりコンパクトなスペースで実現するクラスとして, <code class="em">JSpinner</code>クラスが用意されている. API仕様や各種参考書, ウェブなどで使用方法を調査し, 実際にそれを使ったプログラムを作成して報告せよ.</li> -->
+
+  <p>注意: 課題2とは分けて記入すること. 課題2はファイルの読み込みのみができるエディタに関して, 課題3はそれに追加した保存機能に関してのみ記入である.</p>
+
+  <p>ヒント: まずハリボテに保存ボタンを追加し, イベント処理を追加する.</p>
+
+<pre>保存の JButton が押されたときに,
+  JTextField から getText でファイル名を取り出し,
+  JTextArea から getText で長い文字列を取り出し,
+  ファイルに長い文字列を書き込む.
+</pre>
+
+<li>課題3のプログラムに, さらにステータスバー(<code>JLabel</code>)やスクロールバー(<code>JScrollPane</code>), ファイル選択ダイアログ(<code>JFileChooser</code>), ファイルの新規作成, 検索, 置換等, 可能な範囲で様々な機能を追加してみよ. 一般的なエディタにはない独創的なアイデア(好みのキャラクターのセリフ風に勝手に置換される等)でも良い. (ソース, <em>追加機能</em>のセールスポイント, <em>追加機能</em>のユーザー向け解説, <em>追加機能に関する部分</em>の開発者向け解説, 将来さらに追加してみたい機能を記入して提出)</li>
+    <ul>
+    <li>注意: 課題3とは分けて記入すること. 課題3はファイルの読み書きのみができるエディタに関して, 課題4はそれ以上に追加した機能に関してのみ記入である.</li>
+    </ul>
+
+</ol>
+
+<h3>レポート</h3>
+
+<ul>
+<li>内容: 課題中に指示されている通り. 必要な項目を全て記載しているか, 十分に確認すること.</li>
+</ul>
+
+
+
+</body></html>

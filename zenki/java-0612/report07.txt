@@ -1,0 +1,178 @@
+4J 21番 篠田 裕人 テーマ07 レポート
+
+1. 練習
+ソースコード:kadai1.java
+class kadai1 {
+    public static void main(String[] args) {
+	String s = "しのだひろと";
+	int i;
+
+	for (i = 0; i < s.length() ; i++) {
+	    System.out.print(s.substring(i, i + 1) + " ");
+	}   
+
+	System.out.println();
+
+	for (i = 0; i + 1 < s.length() ; i++) {                                 
+	    System.out.print(s.substring(i, i + 2) + " ");
+	}   
+	System.out.println();
+    }   
+}
+
+実行結果
+p160101@java23:~/javalang/java-0527$ java kadai1
+し の だ ひ ろ と 
+しの のだ だひ ひろ ろと
+
+2. にせ相性占いプログラム
+ソースコード:Uranai.java
+class Uranai {                                                                         
+    String name;
+    String nameid;
+
+    //コンストラクタ
+    Uranai(String name, String nameid) {
+        this.name = name;
+        this.nameid = nameid;
+    }   
+
+    void hantei(Uranai b) {
+        String and = this.nameid + b.nameid;
+        System.out.println(and);
+        int calc = keisan(and);
+        System.out.println("私と「" + b.name + "」君の相性は" + calc + "%です");
+    }   
+
+    int keisan(String and) {
+        int i, num, num2, numid = 0;
+        int result = 0;
+        String sid, andid;
+
+        while(and.length() >= 3) {
+            String calc_id = ""; 
+
+            for (i = 0; i < and.length() - 1 ; i++) {
+                String id = and.substring(i, i + 1); 
+                String id2 = and.substring(i + 1, i + 2); 
+                    
+                num = Integer.parseInt(id);
+                num2 = Integer.parseInt(id2);
+
+                numid = num + num2;
+                if (numid > 9) {
+                    numid -= 10; 
+                }   
+                calc_id += numid;
+            }   
+            and = calc_id;
+            System.out.println(and);
+        }   
+        result = Integer.parseInt(and);
+        return (result);
+    }   
+
+    void print() {
+        System.out.println("私の名前は「" + this.name + "」です");
+    }   
+}
+
+ソースコード:UranaiApp.java
+class UranaiApp {
+    public static void main(String args[]) {
+        Uranai shinoda = new Uranai(args[0], args[1]);
+        Uranai joutarou = new Uranai(args[2], args[3]);
+
+        shinoda.print();
+        shinoda.hantei(joutarou);
+        joutarou.print();
+        joutarou.hantei(shinoda);
+    }
+}
+
+実行結果
+p160101@jryo05:~/javalang/java-0612$ java UranaiApp しのだひろと 251255 じょうたろう 233153
+私の名前は「しのだひろと」です
+251255233153
+76370756468
+3907721004
+297493104
+16132414
+7745655
+419110
+50021
+5023
+525
+77
+私と「じょうたろう」君の相性は77%です
+私の名前は「じょうたろう」です
+233153251255
+56468576370
+1004323907
+104755297
+14120716
+5532787
+085955
+83440
+1784
+852
+37
+私と「しのだひろと」君の相性は37%です
+
+動作説明
+hanteiメソッド内で自分と相手のnameidを結合させる
+結合した文字列をkeisanメソッドで最初の2文字を取得し和を求める
+求めた和の値を新しく用意したcalc_idの中に入れる
+この動作を繰り返し最終的に２文字にある
+その2文字を相性として表示する
+
+3.
+主となるインスタンスがないく引数でしか値を渡していないのでstaticメソッドの方がふさわしい
+
+4.
+ソースコード:Uranai.java
+static void hantei(Uranai a, Uranai b) {
+        String and = a.nameid + b.nameid;
+        System.out.println(and);
+        int calc = keisan(and);
+        System.out.println("「" + a.name + "」君と「" + b.name + "」君の相性は" + calc + "%です");
+}
+
+ソースコード:UranaiApp.java
+	Uranai.hantei(shinoda, joutarou);
+        Uranai.hantei(joutarou, shinoda);
+
+実行結果
+251255233153
+76370756468
+3907721004
+297493104
+16132414
+7745655
+419110
+50021
+5023
+525
+77
+「しのだひろと」君と「じょうたろう」君の相性は77%です
+233153251255
+56468576370
+1004323907
+104755297
+14120716
+5532787
+085955
+83440
+1784
+852
+37
+「じょうたろう」君と「しのだひろと」君の相性は37%です
+
+動作説明
+staticなhanteiメソッドに自分と相手のidを引数として渡し実行する
+
+5. メモリの開放について
+コンピュータに搭載されているメモリには限りがあるため確保したメモリを使ったあとに開放しなくてはすぐにメモリが足りなくなります
+なのでC言語やC++言語ではメモリに入っている使用済みデータを破棄する処理の記述を書かなくては行けないがJava言語ではデータが参照されなくなると自動的に回収して破棄する「ガベージコレクタ」という仕組みがあり他の言語よりもメモリの管理が容易になっている
+
+文献情報(株式会社アンク・3ステップでしっかり学ぶJava入門 [改訂2版]・株式会社技術評論社・2018年・77ページ)

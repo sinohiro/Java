@@ -1,0 +1,89 @@
+4J 21番 篠田 裕人 テーマ12 レポート
+
+1. 素晴らしいと感じた仕組み
+AppTest1
+JFrameが事前に定義されているのが便利だと思った
+
+AppTest2
+ボタンが比較的簡単に表示できることに驚いた
+
+AppTest3
+GUIを使ってアプリケーションを作っていく面白さがわかりました
+
+2. setTextメソッド
+調査した結果
+setText(String text)
+ボタンのテキストを設定します。
+
+ソース中の改造した場所(where)
+actionPerformed内
+
+改造した内容(how)
+actionPerformed内にsetTextを追加
+
+その場所を選んだ理由(why)
+ボタンが押されるとSwingで用意されている
+this.button.addActionListener(this);でフラグを立てて
+actionPerformedが走るのでその中にsetTextでボタン内の文字列を変更すると
+ボタンが押される時に文字を変更出きると思ったから
+
+3. AppTest5
+ソースコード: AppTest5.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+
+public class AppTest5 extends JFrame implements ActionListener {
+	private JButton button;
+	private JLabel	countlabel;
+	private int			count = 0;
+
+	public AppTest5() {
+		super();
+		this.button = new JButton("今日の");
+		getContentPane().add(this.button);
+		this.button.addActionListener(this);
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == this.button) {
+			count++;
+			this.button.setText("進捗どうですか? X " + count);
+			System.out.println(count);
+		}
+	}
+
+
+	public static void main(String[] args) {
+		JFrame mainFrame = new JFrame("4J_21_shinodaApp");
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		AppTest5 a = new AppTest5();
+		a.setSize(640, 480);
+		a.setLocation(100, 100);
+		a.setVisible(true);
+		a.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		a.addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent e){
+				System.exit(0);
+			}
+		});
+	}
+}
+ユーザー向けの解説
+ボタンを押すと「今日の」が「進捗どうですか?」に変わります。
+さらにボタンを押すと「進捗どうですか? X 2」 と数が増えていきます。
+プログラムを終了する時はウインドウの右上に表示されている×ボタンを押すと
+正常終了します
+
+開発者向けの解説
+javaのSwingライブラリを使用してボタンを表示しています
+ボタンが押されるとcount変数に1をプラスする
+それをsetTextでボタン内に表示している文字列を変更しています。
+ウインドウの×ボタンを押すとSystem.exit(0)が走るようになっているので
+×ボタンが押されるとプロセスを正常終了できます
+
+
+4. 初めてGUIプログラムを作成した感想
+GUIがあるプログラムを書いて開発をしていると実行時に目で見える形で結果が帰ってくるので今までよりも楽しく開発ができました。
+今後もっと細かい内容が出きるように努力していきたいと思いました。

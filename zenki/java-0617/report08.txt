@@ -1,0 +1,299 @@
+4J 21番 篠田 裕人 テーマ08 レポート
+
+1. Gakuseiを制限
+ソースコード: Gakusei.java
+class Gakusei {
+    private int gakunen;   // 学年
+    private String bunya; // 分野 "機械", "電気", "電子", "情報", "建築"のいずれかの文字列
+    private String namae;  // 名前
+
+    // コンストラクタ
+    Gakusei() {
+	this.gakunen = 0;
+	this.bunya = "未定";
+	this.namae = "未定";
+    }
+
+    int getgakunen() {
+	return gakunen;
+    }
+
+    String getbunya() {
+	return bunya;
+    }
+
+    String getnamae() {
+	return namae;
+    }
+
+    void setgakunen(int gakunen) {
+	if (gakunen >= 1 && gakunen <= 5) {
+	    this.gakunen = gakunen;
+	}
+    }
+
+    void setbunya(String bunya) {
+	if (bunya.equals("情報") || bunya.equals("機械") || bunya.equals("電子") || bunya.equals("電気") || bunya.equals("建築")) {
+	    this.bunya = bunya;
+	}
+    }
+
+    void setnamae(String namae) {
+	this.namae = namae;
+    }
+
+    void shokai() {
+	// gakunen, bunnya, namaeはthis(主役)のフィールドを使う.
+	System.out.println("私は「" + this.gakunen + "年" + this.bunya + "」の「" + this.namae + "」です.");
+    }
+}
+
+ソースコード: GakuseiApp.java
+class GakuseiApp {
+    public static void main(String[] args) {
+	Gakusei shinoda = new Gakusei();
+	shinoda.setgakunen(7);
+	shinoda.setbunya("情報");
+	shinoda.setnamae("しのだひろと");
+	shinoda.shokai(); // 通常版メソッドを呼び出す
+
+	Gakusei joutarou = new Gakusei();
+	joutarou.setgakunen(5);
+	joutarou.setbunya("妖精");
+	joutarou.setnamae("じょうたろう");
+	joutarou.shokai(); // 通常版メソッドを呼び出す
+    }
+}
+
+実行結果
+私は「0年情報」の「しのだひろと」です.
+私は「5年未定」の「じょうたろう」です.
+
+セッター3つそれぞれの動作説明
+setgakunenはgakunenが1以上5以下以外は値を弾くようにしている
+
+setbunyaは釧路高専に存在する学科名以外は弾くようにしている
+
+setnamaeはそのまま引数の値を渡している
+
+2.aitemu Classの作成
+自分で決めた仕様
+アイテムとして「剣」という文字列以外を弾くという条件でアイテムを定義し、
+攻撃力という概念を追加しattackが0以上100以下という条件で値を入れています
+
+ソースコード:Gakusei.java
+class Aitemu {
+    private String aitemumei = null;
+    private int attack = 0;
+
+    String getaitemumei() {
+	return aitemumei;
+    }
+
+    int gettimeido() {
+	return attack;
+    }
+
+    void setaitemumei(String aitemumei) {
+	if (aitemumei.equals("剣")) {
+	    this.aitemumei = aitemumei;
+	}
+    }
+
+    void setattack(int attack) {
+	if (attack >= 0 && attack <= 100) {
+	    this.attack = attack;
+	}
+    }
+
+    void Ashokai() {
+	System.out.println("あなたの攻撃力は" + this.attack + "です");
+    }
+}
+
+ソースコード:GakuseiApp.java
+class GakuseiApp {
+    public static void main(String[] args) {
+	Gakusei shinoda = new Gakusei();
+	Aitemu shinodaAitem = new Aitemu();
+	shinoda.setgakunen(7);
+	shinoda.setbunya("情報");
+	shinoda.setnamae("しのだひろと");
+
+	shinodaAitem.setaitemumei("スマホ");
+	shinodaAitem.setattack(-20);
+	
+	shinoda.shokai(); // 通常版メソッドを呼び出す
+	shinodaAitem.Ashokai();
+	
+	Gakusei joutarou = new Gakusei();
+	Aitemu joutarouAitem = new Aitemu();
+	joutarou.setgakunen(5);
+	joutarou.setbunya("妖精");
+	joutarou.setnamae("じょうたろう");
+	
+	joutarouAitem.setaitemumei("剣");
+	joutarouAitem.setattack(90);
+	
+	joutarou.shokai(); // 通常版メソッドを呼び出す
+	joutarouAitem.Ashokai();
+
+    }
+}
+
+実行結果
+私は「0年情報」の「しのだひろと」です.
+あなたの攻撃力は0です
+私は「5年未定」の「じょうたろう」です.
+あなたの攻撃力は90です
+
+3.
+ソースコード:Gakusei.java
+class Gakusei {
+    private int gakunen;   // 学年
+    private String bunya; // 分野 "機械", "電気", "電子", "情報", "建築"のいずれかの文字列
+    private String namae;  // 名前
+    private Aitemu aitemuc;
+
+    // コンストラクタ
+    Gakusei() {
+	this.gakunen = 0;
+	this.bunya = "未定";
+	this.namae = "未定";
+    }
+
+    int getgakunen() {
+	return gakunen;
+    }
+
+    String getbunya() {
+	return bunya;
+    }
+
+    String getnamae() {
+	return namae;
+    }
+
+    Aitemu getaitemuc() {
+	return aitemuc;
+    }
+
+    void setgakunen(int gakunen) {
+	if (gakunen >= 1 && gakunen <= 5) {
+	    this.gakunen = gakunen;
+	}
+    }
+
+    void setbunya(String bunya) {
+	if (bunya.equals("情報") || bunya.equals("機械") || bunya.equals("電子") || bunya.equals("電気") || bunya.equals("建築")) {
+	    this.bunya = bunya;
+	}
+    }
+
+    void setnamae(String namae) {
+	this.namae = namae;
+    }
+
+    void setaitemuc(Aitemu aitemuc) {
+	this.aitemuc = aitemuc;
+    }
+
+    void shokai() {
+	System.out.println("私は「" + this.gakunen + "年" + this.bunya + "」の「" + this.namae + "」です.");
+	
+	if (aitemuc != null){
+	System.out.println("私は" + aitemuc.getaitemumei() + "を持っています");
+	System.out.println("詳細は");
+	aitemuc.Ashokai();
+	}
+    }
+}
+
+class Aitemu {
+    private String aitemumei = null;
+    private int attack = 0;
+
+    String getaitemumei() {
+	return aitemumei;
+    }
+
+    int gettimeido() {
+	return attack;
+    }
+
+    void setaitemumei(String aitemumei) {
+	if (aitemumei.equals("剣")) {
+	    this.aitemumei = aitemumei;
+	}
+    }
+
+    void setattack(int attack) {
+	if (attack >= 0 && attack <= 100) {
+	    this.attack = attack;
+	}
+    }
+
+    void Ashokai() {
+	System.out.println("あなたの攻撃力は" + this.attack + "です");
+    }
+}
+
+ソースコード:GakuseiApp.java
+class GakuseiApp {
+    public static void main(String[] args) {
+	Gakusei shinoda = new Gakusei();
+	Aitemu shinodaAitem = new Aitemu();
+	shinoda.setgakunen(7);
+	shinoda.setbunya("情報");
+	shinoda.setnamae("しのだひろと");
+
+	shinodaAitem.setaitemumei("スマホ");
+	shinodaAitem.setattack(-20);
+	shinoda.setaitemuc(shinodaAitem);
+
+	shinoda.shokai(); // 通常版メソッドを呼び出す
+	//shinodaAitem.Ashokai();
+
+	Gakusei joutarou = new Gakusei();
+	Aitemu joutarouAitem = new Aitemu();
+	joutarou.setgakunen(5);
+	joutarou.setbunya("妖精");
+	joutarou.setnamae("じょうたろう");
+
+	joutarouAitem.setaitemumei("剣");
+	joutarouAitem.setattack(90);
+	joutarou.setaitemuc(joutarouAitem);
+
+	joutarou.shokai(); // 通常版メソッドを呼び出す
+	//joutarouAitem.Ashokai();
+
+    }
+}
+
+実行結果
+私は「0年情報」の「しのだひろと」です.
+私はnullを持っています
+詳細は
+あなたの攻撃力は0です
+私は「5年未定」の「じょうたろう」です.
+私は剣を持っています
+詳細は
+あなたの攻撃力は90です
+
+アイテムまるごとのアクセサーの動作説明
+Aitemu classごとaitemucというフィールドに入れ、アクセサでその値を受取り
+shokaiメソッドでaitemucの中に入っているメソッドを呼び出し、持っているアイテム、攻撃力をそれぞれ表示している.
+
+4. 
+privateなメソッドを使う場合はそのメソッドを見られたくないとき、他のクラスに値を入れてほしくないとき使う
+もし、privateなメソッドだったものをpublicなメソッドに変えてしまうと勝手に値などを変えられてしまい結果がおかしくなってしまうのでprivateなメソッドを使う
+
+文献情報(高橋麻奈・やさしいJava 第4版・文唱堂印刷株式会社・2010年・p284,p418)
+
+5.
+クラス全体で扱うデータある場合はクラス全体で扱えるフィールドにデータを格納しておくと変数の呼び出しが楽になります.
+そんなときにクラス全体にフィールドを関連づけるstaticなフィールド(クラス変数)を使います.
+
+文献情報(高橋麻奈・やさしいJava 第4版・文唱堂印刷株式会社・2010年・p289~p291)
+
+

@@ -1,0 +1,112 @@
+4J 21番 篠田 裕人 テーマ00 レポート
+
+1. 
+ソース:Vector2D.java
+コンストラクタ部分
+Vector2D(double cx, double cy){
+    x = cx; 
+    y = cy;                                                                 
+}
+
+ソース:Vector2DApp.java
+class Vector2DApp{                                                              
+    public static void main(String args[]){
+	Vector2D a;
+	a = new Vector2D(Double.parseDouble(args[0]), Double.parseDouble(args[1]));
+	a.print();
+	System.exit(0);
+    }
+}
+
+実行結果
+[p160101@java23 java-0506]$ java Vector2DApp 1 2
+x=1.0y=2.0
+
+動作説明
+args[0],args[1]の値をコンストラクタを呼び出しcx, cyの中に値を入れる
+cx, cyの値をx, yに代入
+printメソッドでx, yを出力
+
+2.
+ソースコード:Vector2D.java
+    double calcNorm() {
+        double Norm;
+
+        Norm = Math.sqrt(x * x + y * y); 
+        return Norm;
+    }
+
+ソースコード:Vector2DApp.java
+        double kadai2;
+        kadai2 = a.calcNorm();
+        System.out.println("ベクトルの大きさは" + kadai2);
+
+        System.exit(0);
+
+実行結果
+p160101@jryo03:~/javalang/java-0506$ java Vector2DApp 3 4
+x=3.0y=4.0
+ベクトルの大きさは5.0
+
+動作説明
+kadai2の中にオブジェクト変数aを入れたcalcNormのリターン値が入り
+その値がSystem.out.printlnによって出力される
+
+3.
+ソースコード:Vector2D.java
+    void subtract(Vector2D3 b) {
+        x -= b.x;
+        y -= b.y;
+    }
+
+ソースコード:Vector2DApp.java
+        Vector2D3 b;
+            
+        b = new Vector2D3(Double.parseDouble(args[2]), Double.parseDouble(args[3]));
+
+        a.subtract(b);
+
+        a.print();
+
+実行結果
+p160101@jryo03:~/javalang/java-0506$ java Vector2DApp3 1 2 3 4
+x=1.0y=2.0
+ベクトルの大きさは2.23606797749979
+x=-2.0y=-2.0
+
+動作説明
+オブジェクト変数bの中にargs[2],args[3]を入れる
+その値をオブジェクト変数aのsubtractに入れる
+subtractメソッド内でaの値とbの値が減算される
+printメソッドでaの値が出力される
+
+4.
+ソースコード:Vector2DApp4.java
+class Vector2DApp4{
+    public static void main(String args[]){
+        Vector2D4 a;
+        a = new Vector2D4(Double.parseDouble(args[0]), Double.parseDouble(args[1]));
+
+        double kadai4;
+
+        kadai4 = a.x - a.y;
+        kadai4 = a.calcNorm();
+        a.print();
+        System.out.println("2点換の距離は" + kadai4);
+
+        System.exit(0);
+    }
+}
+
+実行結果
+p160101@jryo03:~/javalang/java-0506$ java Vector2DApp4 1 2
+x=1.0y=2.0
+2点換の距離は2.23606797749979
+
+動作説明
+kadai4の中にオブジェクト変数aのxとyを引いた値を入れる
+kadai4に入れた値をcalcNormに入れ、２点間の距離を計算する
+計算した値をSystem.out.printlnで出力する
+
+5.
+

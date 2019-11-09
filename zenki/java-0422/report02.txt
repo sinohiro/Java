@@ -1,0 +1,43 @@
+4J 21番 篠田 裕人 テーマ02 レポート
+
+1. A4用紙にて提出
+
+2. 
+ソース YokinApp2.java
+
+class YokinApp2{
+    public static void main(String args[]){
+	Yokin myyokin;
+	myyokin = new Yokin();
+
+	int mygankin = Integer.parseInt(args[0]);
+
+	//myyokin.gankin = 100000;
+	myyokin.gankin = mygankin;
+
+	double kotae;
+	kotae = myyokin.risoku(3);
+	System.out.println ("利息は" + kotae);
+
+	System.exit(0);
+    }
+}
+
+実行
+
+[p160101@java23 java-0422]$ java YokinApp2 10000
+利息は5.0
+[p160101@java23 java-0422]$ java YokinApp2 20000
+利息は10.0
+
+3. 
+for文を作ろうとすると引数の個数であるargcがないのでfor文を
+回すことができない
+
+4.
+c言語の場合kekkaの計算をYokin_risokuという関数で計算しているため
+アロー演算子などを使って値を呼び出さなくてはならないが
+javaではclass Yokinでrisokuの計算を行っているためシンプルな形で値を呼び出せている
+
+5.
+classと言うのはc言語で言う関数と同じ役割であると推測する

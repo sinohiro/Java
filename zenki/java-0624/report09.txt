@@ -1,0 +1,210 @@
+4J 21番 篠田 裕人 テーマ09 レポート
+
+1. 
+ソースコード: Student.java
+class Student {
+    private int gakunen;   // 学年
+    private String bunya; // 分野 "機械", "電気", "電子", "情報", "建築"のいずれかの文字列
+    private String namae;  // 名前
+
+    // コンストラクタ
+    public Student(int gakunen, String bunya, String namae) {
+	this.gakunen = gakunen;
+	this.bunya = bunya;
+	this.namae = namae;
+    }
+
+    public int getgakunen() {
+	return gakunen;
+    }
+
+    public String getbunya() {
+	return bunya;
+    }
+
+    public String getnamae() {
+	return namae;
+    }
+
+    public void shokai() {
+	System.out.println("私は「" + this.gakunen + "年" + this.bunya + "」の「" + this.namae + "」です.");
+    }
+}
+
+2. 
+ソースコード: HomeStudent.java
+public class HomeStudent extends Student {
+    private String tuugaku;
+
+    public HomeStudent(int gakunen, String bunya, String namae, String tuugaku) {
+	super(gakunen, bunya, namae);
+	this.tuugaku = tuugaku;
+    }
+
+    public String gettuugaku() {
+	return tuugaku;
+    }
+
+    public void shokai() {
+	System.out.println("私は「" + getgakunen() + "年" + getbunya() + "」の「" + getnamae() + "」です. 登校手段は「" + this.tuugaku + "」です.");
+    }
+}
+
+ソースコード: HomeStudentApp.java
+public class HomeStudentApp {
+    public static void main(String[] args) {
+	Student joutarou = new Student(5, "妖精", "じょうたろう");
+
+	HomeStudent shinoda = new HomeStudent(4, "情報", "しのだひろと", "バス");
+
+	joutarou.shokai();
+	shinoda.shokai();
+    }
+}
+
+実行結果
+私は「5年妖精」の「じょうたろう」です.
+私は「4年情報」の「しのだひろと」です. 登校手段は「バス」です.
+
+動作説明
+HomeStudentクラスでtuugakuという新しいフィールドを用意し通学方法を入れます
+その通学方法のデータをshokaiメソッドで表示しています
+その際にextendsでStudentを継承し、gakunen, bunya, namaeをゲットし同時に表示しています
+
+3,4.
+ソースコード: DormStudent.java
+class DormStudent extends Student {
+    private DormStudent roommate;
+
+    public DormStudent(int gakunen, String bunya, String namae) {
+	super(gakunen, bunya, namae);
+    }
+
+    public DormStudent getroommate() {
+	return roommate;
+    }
+
+    void setroommate(DormStudent roommate) {
+	this.roommate = roommate;
+	if (roommate.roommate == null) {
+	    roommate.roommate = this;
+	}
+    }
+
+    public void shokai() {
+	System.out.print("私は「" + getgakunen() + "年" + getbunya() + "」の「" + getnamae() + "」です. 寮の同室者は「");
+	if (this.roommate == null) {
+	    System.out.println("なし」です.");
+	} else {
+	    System.out.println(this.roommate.getnamae() +"」です.");
+	}
+    }
+}
+
+ソースコード: DormStudentApp.java
+public class DormStudentApp {
+    public static void main(String[] args) {
+	DormStudent joutarou = new DormStudent(5, "妖精", "じょうたろう");
+	DormStudent shinoda = new DormStudent(4, "情報", "しのだひろと");
+
+	joutarou.setroommate(shinoda);
+
+	joutarou.shokai();
+	shinoda.shokai();
+    }
+}
+
+実行結果
+私は「5年妖精」の「じょうたろう」です. 寮の同室者は「しのだひろと」です.
+私は「4年情報」の「しのだひろと」です. 寮の同室者は「じょうたろう」です.
+
+動作説明
+セッターsetroommatemeで自分のroommateに相手のインスタンスshinodaを代入し
+もし相手のroommateの値がnullだった場合、相手のroommateに自分の値を代入する
+shokaiメソッド内でgetgakunen(), getbunya(), getnamae()を行いそれぞれの値を表示、のちにセッターで代入した値をnullか確認しそうであれば「なし」、でなければ「セッターで代入した値の名前」を表示する
+
+5.自由課題
+自分で決めた設定
+ServerComputer is a Computerとする
+スーパークラス: Computerの要素はCPU, memoey, watt
+サブクラス: ServerComputerに新しい要素としてApacheのVersionを追加
+
+ソースコード:Computer.java
+class Computer {
+	private String cpu;
+	private int memory; //単位はGBとする
+	private int watt;
+
+	//コンストラクタ
+	public Computer(String cpu, int memory, int watt) {
+		this.cpu = cpu;
+		this.memory = memory;
+		this.watt = watt;
+	}
+
+	public String getcpu() {
+		return cpu;
+	}
+
+	public int getmemory() {
+		return memory;
+	}
+
+	public int getwatt() {
+		return watt;
+	}
+
+	public void sanshou() {
+		System.out.println("このパソコンのCPUは「" + this.cpu + "」");
+		System.out.println("メモリ数は「" + this.memory + "Gb」");
+		System.out.println("消費電力「" + this.watt + "W」です");
+	}
+}
+
+ソースコード:ServerComputer.java
+public class ServerComputer extends Computer {
+	private String ApacheVersion;
+
+	public ServerComputer(String cpu, int memory, int watt, String ApacheVersion) {
+		super(cpu, memory, watt);
+		this.ApacheVersion = ApacheVersion;
+	}
+
+	public String getApacheVersion() {
+		return ApacheVersion;
+	}
+
+	public void sanshou() {
+		System.out.println("このパソコンのCPUは「" + getcpu() + "」");
+		System.out.println("メモリは「" + getmemory() + "GB」");
+		System.out.println("消費電力「" + getwatt() + "W」です");
+		System.out.println("ApacheのVersionは「" + this.ApacheVersion + "」です");
+	}
+
+}
+
+ソースコード:ServerComputerApp.java
+public class ServerComputerApp {
+	public static void main(String[] args) {
+		Computer shinodaPC = new Computer("Intel_i5_8400", 16, 700);
+		ServerComputer serverPC = new ServerComputer("AMD_PhenomⅡ_X6_1075T", 16, 650, "2.4.29");
+
+		shinodaPC.sanshou();
+		serverPC.sanshou();
+	}
+}
+
+実行結果
+このパソコンのCPUは「Intel_i5_8400」
+メモリ数は「16Gb」
+消費電力「700W」です
+このパソコンのCPUは「AMD_PhenomⅡ_X6_1075T」
+メモリは「16GB」
+消費電力「650W」です
+ApacheのVersionは「2.4.29」です
+
+動作説明
+Computerクラスはcpu,memory,wattの値をComputerクラスのsanshouクラスで表示します
+サブクラスServerComputerでApacheVersionという新しいフィールドを用意しServerPCのApacheVersionの値を入れます
+その値のデータをServerComputerクラスのsanshouメソッドで表示しています
+その際にextendsでスーパークラスComputerを継承し、cpu, memory, wattをゲットし同時に表示しています

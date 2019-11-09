@@ -1,0 +1,273 @@
+4J 21番 篠田 裕人 テーマ06 レポート
+
+1.
+ソースコード: Gakusei2.java
+class Gakusei2
+{
+    int gakunen;   // 学年
+    String bunnya; // 分野 "機械", "電気", "電子", "情報", "建築"のいずれかの文字列
+    String namae;  // 名前
+    String jukyo;  // 住居
+
+    // コンストラクタ
+    Gakusei2(int gakunen, String bunnya, String namae, String jukyo) {
+	this.gakunen = gakunen;
+	this.bunnya = bunnya;
+	this.namae = namae;
+	this.jukyo = jukyo;
+    }
+
+    void shokai() // 通常版
+    {
+	// gakunen, bunnya, namaeはthis(主役)のフィールドを使う.
+	System.out.println("私は「" + this.gakunen + "年" + this.bunnya + "」の「" + this.namae + "」です. 私の住居は「" + this.jukyo + "」です.");
+    }
+    static void shokai(Gakusei2 a) // static版
+    {
+	// gakunen, bunnya, namaeは引数aのフィールドを使う.
+	System.out.println("彼は「" + a.gakunen + "年" + a.bunnya + "」の「" + a.namae + "」君です. 私の住居は「" + a.jukyo + "」です.");
+    }
+}
+
+ソースコード: GakuseiApp2.java
+class GakuseiApp2
+{
+    public static void main(String[] args)
+    {
+	Gakusei2 shinoda = new Gakusei2(4, "情報", "しのだひろと", "自宅");
+	Gakusei2 joutarou = new Gakusei2(5, "情報", "じょうほうたろう", "学寮");
+	shinoda.shokai(); // 通常版メソッドを呼び出す
+	joutarou.shokai();   // 通常版メソッドを呼び出す
+	Gakusei2.shokai(shinoda); // static版メソッドを呼び出す
+	Gakusei2.shokai(joutarou);   // static版メソッドを呼び出す
+    }
+}
+実行結果
+p160101@java23:~/javalang/java-0520$ java GakuseiApp2
+私は「4年情報」の「しのだひろと」です. 私の住居は「自宅」です.
+私は「5年情報」の「じょうほうたろう」です. 私の住居は「学寮」です.
+彼は「4年情報」の「しのだひろと」君です. 私の住居は「自宅」です.
+彼は「5年情報」の「じょうほうたろう」君です. 私の住居は「学寮」です.
+
+動作説明
+インスタンスshinodaとjoutarouの4つの値がフィールドgakunen, bunnya, namae, jukyoにそれぞれ入りその値が表示される
+
+2. 
+ソースコード: Gakusei2.java
+class Gakusei2
+{
+    int gakunen;   // 学年
+    String bunnya; // 分野 "機械", "電気", "電子", "情報", "建築"のいずれかの文字列
+    String namae;  // 名前
+    String jukyo;  // 住居
+
+    // コンストラクタ
+    Gakusei2(int gakunen, String bunnya, String namae, String jukyo) {
+	this.gakunen = gakunen;
+	this.bunnya = bunnya;
+	this.namae = namae;
+	this.jukyo = jukyo;
+    }
+
+    void shokai() // 通常版
+    {
+	// gakunen, bunnya, namaeはthis(主役)のフィールドを使う.
+	System.out.println("私は「" + this.gakunen + "年" + this.bunnya + "」の「" + this.namae + "」です. 私の住居は「" + this.jukyo + "」です.");
+    }
+    static void shokai(Gakusei2 a) // static版
+    {
+	// gakunen, bunnya, namaeは引数aのフィールドを使う.
+	System.out.println("彼は「" + a.gakunen + "年" + a.bunnya + "」の「" + a.namae + "」君です. 私の住居は「" + a.jukyo + "」です.");
+    }
+
+    void yujin(Gakusei2 a) {
+	System.out.println("私「" + this.namae + "」は「" + a.namae + "」君と友人です.");
+    }
+
+    static void yujin(Gakusei2 a, Gakusei2 b) {
+	System.out.println("「" + a.namae + "」は「" + b.namae + "」君と友人です.");
+    }
+}
+
+ソースコード: GakuseiApp2.java
+class GakuseiApp2
+{
+    public static void main(String[] args)
+    {
+	Gakusei2 shinoda = new Gakusei2(4, "情報", "しのだひろと", "自宅");
+	Gakusei2 joutarou = new Gakusei2(5, "情報", "じょうほうたろう", "学寮");
+	shinoda.shokai(); // 通常版メソッドを呼び出す
+	joutarou.shokai();   // 通常版メソッドを呼び出す
+	Gakusei2.shokai(shinoda); // static版メソッドを呼び出す
+	Gakusei2.shokai(joutarou);   // static版メソッドを呼び出す
+
+	shinoda.yujin(joutarou);
+	joutarou.yujin(shinoda);
+	Gakusei2.yujin(shinoda, joutarou);
+    }
+}
+実行結果
+p160101@java23:~/javalang/java-0520$ java GakuseiApp2
+私は「4年情報」の「しのだひろと」です. 私の住居は「自宅」です.
+私は「5年情報」の「じょうほうたろう」です. 私の住居は「学寮」です.
+彼は「4年情報」の「しのだひろと」君です. 私の住居は「自宅」です.
+彼は「5年情報」の「じょうほうたろう」君です. 私の住居は「学寮」です.
+私「しのだひろと」は「じょうほうたろう」君と友人です.
+私「じょうほうたろう」は「しのだひろと」君と友人です.
+「しのだひろと」は「じょうほうたろう」君と友人です.
+
+動作説明
+通常版ではthisが使えるので「私は」のところをthisで値を呼び出し
+もう一方は引数としてjoutarouの値を呼び出した
+static版はthisが使えないので引数としてshinodaとjoutarouそれぞれの値を
+呼び出し、値を出力した
+
+3. combiメソッド
+ソースコード:Gakusei2.java
+void combi(Gakusei2 a) {
+    if (this.jukyo.equals(a.jukyo)){
+
+	System.out.println("私「" + this.namae + "」と「" + a.namae + "」君はコンビです.");
+    }
+    else {
+	System.out.println("私「" + this.namae + "」は「" + a.namae + "」君はコンビではありません.");
+    }
+}
+
+static void combi(Gakusei2 a, Gakusei2 b) {
+    if (a.jukyo.equals(b.jukyo)){
+	System.out.println("「" + a.namae + "」と「" + b.namae + "」君はコンビです.");
+    }
+    else {
+	System.out.println("「" + a.namae + "」は「" + b.namae + "」君はコンビではない.");
+    }
+}
+
+ソースコード:GakuseiApp2.java
+shinoda.combi(joutarou);
+Gakusei2.combi(shinoda, joutarou);
+katochan.shokai();
+katochan.combi(joutarou);
+Gakusei2.combi(katochan, joutarou);
+
+実行結果
+p160101@jryo03:~/javalang/java-0520$ java GakuseiApp2
+私「しのだひろと」は「じょうほうたろう」君はコンビではありません.
+「しのだひろと」は「じょうほうたろう」君はコンビではない.
+私は「4年情報」の「かとうふうか」です. 私の住居は「学寮」です.
+私「かとうふうか」と「じょうほうたろう」君はコンビです.
+「かとうふうか」と「じょうほうたろう」君はコンビです.
+
+動作説明
+友人メソッドとあまり変わらず,通常版ではthisが使えるので「私は」のところをthisで値を呼び出し
+もう一方は引数としてjoutarouの値を呼び出した
+static版はthisが使えないので引数としてshinodaとjoutarouそれぞれの値を呼び出した
+判定のため新しくkatochanというインスタンスを追加しそれをshokaiとcombiメソッドの中に値をいれ、
+結果を出力した
+
+4. shinkyuメソッド
+ソースコード:Gakusei2.java
+    void shinkyu(){
+        this.gakunen += 1;
+        System.out.println("私は" + this.gakunen + "年に進級しました!");
+    }
+
+    static void shinkyu(Gakusei2 a){
+        a.gakunen += 1;
+        System.out.println("「" + a.namae + "」は" + a.gakunen + "年に進級しました!");
+    }
+
+ソースコード:GakuseiApp2.java
+        joutarou.shinkyu();
+        Gakusei2.shinkyu(katochan);
+        joutarou.shokai();
+        katochan.shokai()
+
+実行結果
+p160101@jryo03:~/javalang/java-0520$ java GakuseiApp2
+私は4年に進級しました!
+「かとうふうか」は5年に進級しました!
+私は「4年情報」の「じょうほうたろう」です. 私の住居は「学寮」です.
+私は「5年情報」の「かとうふうか」です. 私の住居は「学寮」です.
+
+動作説明
+shinkyuメソッドはインスタンスのgakunenの値が1上がりそれを出力する
+通常版とstatic版の違いはstatic版ではthisを使えないので引数として
+インスタンスを渡さなければならないが通常版では引数がなくともインスタンスを渡せる
+
+5. 自作アニメインフォ
+ソースコード:Anime.java
+class Anime
+{
+    String name;   // アニメ名
+    int toshi  ; // 放送年
+    String tuki;  // 放送月
+    String channel;  // 放送局
+
+    // コンストラクタ
+    Anime(String name, int toshi, String tuki, String channel) {
+	this.name = name;
+	this.toshi = toshi;
+	this.tuki = tuki;
+	this.channel = channel;
+    }
+
+    void shokai() {
+	System.out.println("アニメ名[" + this.name + "] 年[" + this.toshi + "] 季節[" + this.tuki + "] 放送局[" + this.channel + "]");
+    }
+
+    void tuki_onazi(Anime a) {
+	if (this.tuki.equals(a.tuki)){
+	    System.out.println("「" + this.name + "」と「" + a.name + "」は同じ季節の放送です.");
+	}
+	else {
+	    System.out.println("「" + this.name + "」と「" + a.name + "」は違う季節の放送です.");
+	}
+    }
+
+    void bansakutsukita() {
+	this.toshi += 1;
+	System.out.println("アニメ名[" + this.name + "]は万策尽きて放送が" + this.toshi +"年に遅れました.残念...");
+    }
+}
+
+ソースコード:AnimeApp.java
+class AnimeApp
+{
+    public static void main(String[] args)
+    {
+        Anime meido = new Anime("メイドインアビス",2017, "夏", "BS11");
+        Anime ccsakura = new Anime("ccさくら_cc編", 2018, "冬", "NHK");
+        Anime gotoubun = new Anime("五等分の花嫁", 2019, "冬", "TBS");
+        Anime poptepi = new Anime("ポプテピピック", 2018, "冬", "AbemaTV");
+
+	meido.shokai();
+	ccsakura.shokai();
+	gotoubun.shokai();
+	poptepi.shokai();
+
+	ccsakura.tuki_onazi(gotoubun);
+	meido.tuki_onazi(gotoubun);
+
+	poptepi.bansakutsukita();
+	poptepi.shokai();
+    }
+}
+
+実行結果
+p160101@jryo03:~/javalang/java-0520$ java AnimeApp
+アニメ名[メイドインアビス] 年[2017] 季節[夏] 放送局[BS11]
+アニメ名[ccさくら_cc編] 年[2018] 季節[冬] 放送局[NHK]
+アニメ名[五等分の花嫁] 年[2019] 季節[冬] 放送局[TBS]
+アニメ名[ポプテピピック] 年[2018] 季節[冬] 放送局[AbemaTV]
+「ccさくら_cc編」と「五等分の花嫁」は同じ季節の放送です.
+「メイドインアビス」と「五等分の花嫁」は違う季節の放送です.
+アニメ名[ポプテピピック]は万策尽きて放送が2019年に遅れました.残念...
+アニメ名[ポプテピピック] 年[2019] 季節[冬] 放送局[AbemaTV]
+
+動作説明
+アニメがいつ放送されるかのインフォメーションもどきを作ってみました.
+shokaiメソッドでそれぞれの名前、放送年、放送季節、放送局を表示
+tuki_onaziメソッドでそのインスタンスの季節と引数として呼び出したインスタンスの季節を
+比較し同じ季節に放送されたかどうかを判定する
+bansakutsukitaメソッドでは該当のアニメの放送年を一年遅らせそれを表示しました

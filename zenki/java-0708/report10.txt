@@ -1,0 +1,239 @@
+4J 21番 篠田 裕人 テーマ10 レポート
+
+1. 可変長配列クラス作成
+ソースコード:VarIntArray.java
+class VarIntArray {
+  private int maxyouso;
+  private int[] hairetu;
+	private int nowyouso;
+
+  public VarIntArray() {
+		this.maxyouso = 5;
+		hairetu = new int[5];
+		this.nowyouso = 0;
+  }
+
+  public void add(int youso) {
+		if (nowyouso < maxyouso) {
+			hairetu[nowyouso] = youso;
+			nowyouso ++;
+		} else {
+				System.out.println("Error:配列の最大要素数を越えました");
+			}
+  }
+
+	public int getnowyouso() {
+		return nowyouso;
+  }
+
+  public int gethairetu(int yousoNo) {
+		return hairetu[yousoNo];
+  }
+
+  public void print() {
+		int i;
+		for (i = 0; nowyouso > i ; i ++) {
+			System.out.print(i + ";");
+			System.out.println(gethairetu(i));
+		}
+  }
+}
+
+ソースコード:VarIntArrayApp.java
+class VarIntArrayApp {
+	public static void main(String[] args) {
+		VarIntArray via = new VarIntArray();
+
+		via.add(157);
+		via.add(114);
+		via.add(16);
+		via.add(93);
+		via.add(12);
+		via.add(11);
+		via.print();
+	}
+}
+
+実行結果
+p160101@java23:~/javalang/java-0708$ java VarIntArrayApp
+Error:配列の最大要素数を越えました
+0;157
+1;114
+2;16
+3;93
+4;12
+
+動作説明
+フィールドに「最大要素数」、「配列」、「今の要素番号」を用意
+コンストラクタでフィールドそれぞれの値を決める
+addメソッドでもし、今の要素番号が最大要素数を越えていなければ今の要素数にメインのyousoを代入し今の要素番号を1プラスする
+それ以外はエラー文として「Error:配列の最大要素数を越えました」と表示するようにしている
+あとはゲッターと配列内の値をプリントするprintメソッドである
+
+2.
+ソースコード:ClassRoom.java
+class ClassRoom {
+	private int maxgakusei;
+	private Student[] gakusei;
+	private int nowgakusei;
+
+	public ClassRoom() {
+		this.maxgakusei = 5;
+		gakusei = new Student[5];
+		this.nowgakusei = 0;
+	}
+
+	public void add(Student addgakusei) {
+		if (nowgakusei < maxgakusei) {
+			gakusei[nowgakusei] = addgakusei;
+			nowgakusei ++;
+		} else {
+			System.out.println("Error:配列の最大要素数を越えました");
+		}
+	}
+
+	public int getnowgakusei() {
+		return nowgakusei;
+	}
+
+	public Student getgakusei(int nowgakusei) {
+		return gakusei[nowgakusei];
+	}
+
+	public void zenshokai() {
+		int i;
+
+		for (i = 0; i < nowgakusei; i++) {
+			(getgakusei(i)).shokai();
+		}
+	}
+}
+
+ソースコード: ClassRoomApp.java
+class ClassRoomApp {
+	public static void main(String[] args) {
+		HomeStudent joutarou = new HomeStudent(4, "妖精", "じょうたろう", "ホバー");
+		HomeStudent shinoda = new HomeStudent(4, "情報", "しのだひろと", "バス");
+		HomeStudent huuka = new HomeStudent(4, "情報", "かとうふうか", "瞬間移動");
+		DormStudent a = new DormStudent(4, "情報", "アルファ");
+		DormStudent	b = new DormStudent(4, "情報", "ベータ");
+		DormStudent c = new DormStudent(4, "情報", "チャーリー");
+
+		a.setroommate(b);
+
+		ClassRoom j4 = new ClassRoom();
+		j4.add(joutarou);
+		j4.add(shinoda);
+		j4.add(huuka);
+		j4.add(a);
+		j4.add(b);
+		j4.add(c);
+
+		j4.zenshokai();
+	}
+}
+
+実行結果
+sinohiro@sinohiro-server:~/javalang/java-0708$ java ClassRoomApp
+Error:配列の最大要素数を越えました
+私は「4年妖精」の「じょうたろう」です. 登校手段は「ホバー」です.
+私は「4年情報」の「しのだひろと」です. 登校手段は「バス」です.
+私は「4年情報」の「かとうふうか」です. 登校手段は「瞬間移動」です.
+私は「4年情報」の「アルファ」です. 寮の同室者は「ベータ」です.
+私は「4年情報」の「ベータ」です. 寮の同室者は「アルファ」です.
+
+動作説明
+フィールドに「最大要素数」、「配列」、「今の要素番号」を用意
+コンストラクタでフィールドそれぞれの値を決める
+add関数で配列内に引数で持ってきたaddgakuseiを代入する
+その後、nowgakuseiのゲッター, gakuseiのゲッター
+全紹介メソッドがあり全紹介メソッドではgetgakuseiに0から5の配列をshokaiメソッドで配列内のデータをforで回して表示しています。
+
+3.削除関数
+ソースコード: ClassRoom.java
+	public void del(int delnomber) {
+		gakusei[delnomber] = null;
+		for (int i = delnomber ; i < maxgakusei - 1 ; i++) {
+			gakusei[i] = gakusei[i + 1];
+			gakusei[i + 1] = null;
+		}
+		gakusei[maxgakusei - 1] = null;
+		nowgakusei--;
+	}
+
+実行結果
+sinohiro@sinohiro-notepc:/media/sinohiro/UsbStorage/javalang/java-0708$ java ClassRoomApp
+Error:配列の最大要素数を越えました
+私は「4年妖精」の「じょうたろう」です. 登校手段は「ホバー」です.
+私は「4年情報」の「しのだひろと」です. 登校手段は「バス」です.
+私は「4年情報」の「アルファ」です. 寮の同室者は「ベータ」です.
+私は「4年情報」の「ベータ」です. 寮の同室者は「アルファ」です.
+
+動作説明
+引数でもらった番号の配列にnullを入れデータを削除し一つ先にある配列のデータをその配列に入れる
+それをforで一つずつ配列内のデータを一つずつ移動し
+最後にコピー先のデータが余るのでそれにnullを入れ削除する
+
+4.
+ソースコード:ClassRoom.java
+	public void setmaxgakusei(int newmaxgakusei) {
+		Student[] newgakusei;
+		newgakusei = new Student[newmaxgakusei];
+		for (int j = 0 ; j < maxgakusei ; j++) {
+			newgakusei[j] = gakusei[j];
+		}
+		gakusei = newgakusei;
+	}
+
+ソースコード:ClassRoomApp.java
+class ClassRoomApp {
+	public static void main(String[] args) {
+		HomeStudent joutarou = new HomeStudent(4, "妖精", "じょうたろう", "ホバー");
+		HomeStudent shinoda = new HomeStudent(4, "情報", "しのだひろと", "バス");
+		HomeStudent huuka = new HomeStudent(4, "情報", "かとうふうか", "瞬間移動");
+		DormStudent a = new DormStudent(4, "情報", "アルファ");
+		DormStudent	b = new DormStudent(4, "情報", "ベータ");
+		DormStudent c = new DormStudent(4, "情報", "チャーリー");
+
+		a.setroommate(b);
+
+		ClassRoom j4 = new ClassRoom();
+		j4.add(joutarou);
+		j4.add(shinoda);
+		j4.add(huuka);
+		j4.add(a);
+		j4.add(b);
+		j4.add(c);
+
+		j4.del(2);
+		j4.zenshokai();
+
+		j4.setmaxgakusei(6);
+		j4.add(c);;
+
+		j4.zenshokai();
+	}
+}
+
+実行結果
+p160101@japp26:~/javalang/java-0708$ java ClassRoomApp
+Error:配列の最大要素数を越えました
+私は「4年妖精」の「じょうたろう」です. 登校手段は「ホバー」です.
+私は「4年情報」の「しのだひろと」です. 登校手段は「バス」です.
+私は「4年情報」の「アルファ」です. 寮の同室者は「ベータ」です.
+私は「4年情報」の「ベータ」です. 寮の同室者は「アルファ」です.
+私は「4年妖精」の「じょうたろう」です. 登校手段は「ホバー」です.
+私は「4年情報」の「しのだひろと」です. 登校手段は「バス」です.
+私は「4年情報」の「アルファ」です. 寮の同室者は「ベータ」です.
+私は「4年情報」の「ベータ」です. 寮の同室者は「アルファ」です.
+私は「4年情報」の「チャーリー」です. 寮の同室者は「なし」です.
+
+動作説明
+新しい学生最大値のセッターで新しい学生配列を作りその中にfor文で元の学生配列野中を新しい学生配列にコピーする
+その後学生配列のアドレスを新しい学生配列のアドレスに切り替えてzenshokaiメソッドの読み込み先を新しい学生配列にする
+
+5.レポート
+c言語はプログラム内で確保したメモリ領域以外のメモリ領域を読み書きできてしまうため実行した際にエラーが表示されずプログラム内に想定していない値などが入りプログラムの修正が困難になる、またセキュリティー面でも良くない
+JavaはOut Of Boundsなどのエラーが出て確保したメモリ領域以外を読み込まないのでプログラムの修正も用意になり、セキュリティー面も良い
+
+参考文献(B.W.カーニハン/D.M.リッチー, プログラミング言語C 第二版, 共立出版株式会社, 2013年, 113~122ページ)

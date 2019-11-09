@@ -1,0 +1,130 @@
+4J 21番 篠田 裕人 テーマ15 レポート
+
+1.
+ソースコード: FileReaderTest.java
+import java.io.*;
+
+public class cattest {
+	public static void main(String[] args) {
+		try
+		{
+			FileReader fr = new FileReader(args[0]); // ファイルを開く.
+			BufferedReader br = new BufferedReader(fr);
+			String buf;
+			while ((buf = br.readLine()) != null) // 1行読み込み, それがnullでなければ,
+				{
+					System.out.println(buf); // bufを処理する(この例では表示するだけ).
+			}
+			br.close();
+			fr.close(); // ファイルを閉じる.
+		}
+		catch (IOException e) // もしエラーが起きたら,
+					{
+						System.out.println("ファイル読み込みエラー");
+						System.exit(1); // 実行終了
+		}
+	}
+}
+
+2. ファイルの内容を読み取るGUIアプリケーションの作成
+ソースコード: FileReaderTest.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.io.*;
+
+public class FileReaderTest extends JFrame implements ActionListener {
+	private JButton button1;
+	private JLabel	mainlabel;
+	private JLabel	mainlabel2;
+	private JTextField tf1;
+	private JTextArea ta1;
+
+	public FileReaderTest() {
+		super();
+		this.button1 = new JButton("file_Output");
+		this.mainlabel = new JLabel("FileReader_Test_Progrram");
+		this.mainlabel.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 20));
+		this.mainlabel2 = new JLabel("Pleese_input_FileName -> ");
+		this.tf1 = new JTextField(10);
+		this.ta1 = new JTextArea(10, 20);
+
+		JPanel panel1 = new JPanel();
+		panel1.setLayout(new FlowLayout());
+		panel1.add(this.mainlabel);
+
+		JPanel panel2 = new JPanel();
+		panel2.setLayout(new FlowLayout());
+		panel2.add(this.mainlabel2);
+		panel2.add(this.tf1);
+		panel2.add(this.button1);
+		panel2.add(this.ta1);
+
+		JPanel panel3 = new JPanel();
+		panel3.setLayout(new BoxLayout(panel3, BoxLayout.PAGE_AXIS));
+		panel3.add(panel1);
+		panel3.add(panel2);
+
+		getContentPane().add(panel3);
+		this.button1.addActionListener(this);
+	}
+
+	public void actionPerformed(ActionEvent ae) {
+		if (ae.getSource() == this.button1) {
+			String gettext1 = this.tf1.getText();
+			try {
+				FileReader fr = new FileReader(gettext1); // ファイルを開く.
+				BufferedReader br = new BufferedReader(fr);
+				String buf;
+				while ((buf = br.readLine()) != null) // 1行読み込み, それがnullでなければ,
+					{
+						this.ta1.setText(buf);
+						System.out.println("File_Output -> \n" + buf); // bufを処理する(この例では表示するだけ).
+				}
+				br.close();
+				fr.close(); // ファイルを閉じる.
+			}
+			catch (IOException e) {
+							System.out.println("ファイル読み込みエラー");
+							this.ta1.setText("Error: ファイルが見つかりません!!");
+							//System.exit(1); // 実行終了
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		JFrame mainFrame = new JFrame("4J_21_shinodaApp");
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		FileReaderTest a = new FileReaderTest();
+		a.setSize(1280, 720);
+		a.setLocation(100, 100);
+		a.setVisible(true);
+		a.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		a.addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent e){
+				System.exit(0);
+			}
+		});
+	}
+}
+
+
+ユーザー向け解説
+左側に読み込みたいファイル名を拡張子込みで入力してください
+入力した後に下のボタンを押すと右側にファイルの内容が表示されます
+ファイル名を間違えると「Error: ファイルが見つかりません!!」とエラーメッセージが表示されます
+
+開発者向け解説
+左側のテキストボックスの中身をstring型のgettextに入れ
+gettextの中に入った文字列と同じ名前のファイルの内容を右側のテキストボックスにsettextで表示しています
+ファイル名を間違った場合はError文をta1にsetTextしています
+
+3. 課題2を改良しテキストエディタ(仮)の作成
+保存機能に関する部分のソースコード: TextEditor.java
+
+保存機能のユーザー向け解説,
+
+保存機能に関する部分の開発者向け解説
+
+4.

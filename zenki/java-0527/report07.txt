@@ -1,0 +1,30 @@
+4J 21番 篠田 裕人 テーマ07 レポート
+
+1. 練習
+ソースコード:kadai1.java
+class kadai1 {
+    public static void main(String[] args) {
+	String s = "しのだひろと";
+	int i;
+
+	for (i = 0; i < s.length() ; i++) {
+	    System.out.print(s.substring(i, i + 1) + " ");
+	}   
+
+	System.out.println();
+
+	for (i = 0; i + 1 < s.length() ; i++) {                                 
+	    System.out.print(s.substring(i, i + 2) + " ");
+	}   
+	System.out.println();
+    }   
+}
+
+実行結果
+p160101@java23:~/javalang/java-0527$ java kadai1
+し の だ ひ ろ と 
+しの のだ だひ ひろ ろと
+
+2. にせ相性占いプログラム
+ソースコード:Uranai.java
+
