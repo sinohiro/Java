@@ -9,6 +9,7 @@ public class TextEditor extends JFrame implements ActionListener {
 	private JButton button2;
 	private JLabel	mainlabel;
 	private JLabel	mainlabel2;
+	private JLabel	err;
 	private JTextField tf1;
 	private JTextArea ta1;
 
@@ -16,9 +17,10 @@ public class TextEditor extends JFrame implements ActionListener {
 		super();
 		this.button1 = new JButton("file_Open");
 		this.button2 = new JButton("file_Save");
-		this.mainlabel = new JLabel("FileReader_Test_Progrram");
+		this.mainlabel = new JLabel("TextEditer_Progrram");
 		this.mainlabel.setFont(new Font("ＭＳ ゴシック", Font.BOLD, 20));
 		this.mainlabel2 = new JLabel("Pleese_input_FileName -> ");
+		this.err = new JLabel("");
 		this.tf1 = new JTextField(10);
 		this.ta1 = new JTextArea(10, 20);
 
@@ -36,6 +38,7 @@ public class TextEditor extends JFrame implements ActionListener {
 		panel3.setLayout(new FlowLayout());
 		panel3.add(this.ta1);
 		panel3.add(this.button2);
+		panel3.add(this.err);
 
 		JPanel panel4 = new JPanel();
 		panel4.setLayout(new BoxLayout(panel4, BoxLayout.PAGE_AXIS));
@@ -45,6 +48,7 @@ public class TextEditor extends JFrame implements ActionListener {
 
 		getContentPane().add(panel4);
 		this.button1.addActionListener(this);
+		this.button2.addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent ae) {
@@ -53,12 +57,15 @@ public class TextEditor extends JFrame implements ActionListener {
 			try {
 				FileReader fr = new FileReader(gettext1); // ファイルを開く.
 				BufferedReader br = new BufferedReader(fr);
+				String all = "";
 				String buf;
 				while ((buf = br.readLine()) != null) // 1行読み込み, それがnullでなければ,
 					{
-						this.ta1.setText(buf);
+						all += buf;
+						all += System.getProperty("line.separator");
 						System.out.println("File_Output -> \n" + buf); // bufを処理する(この例では表示するだけ).
 				}
+				this.ta1.setText(all);
 				br.close();
 				fr.close(); // ファイルを閉じる.
 			}
@@ -66,6 +73,24 @@ public class TextEditor extends JFrame implements ActionListener {
 							System.out.println("ファイル読み込みエラー");
 							this.ta1.setText("Error: ファイルが見つかりません!!");
 							//System.exit(1); // 実行終了
+			}
+		}
+
+		if (ae.getSource() == this.button2) {
+			String save_name = this.tf1.getText();
+			String save_file = this.ta1.getText();
+
+			try {
+				FileWriter fw = new FileWriter(save_name);
+				BufferedWriter bw = new BufferedWriter(fw);
+				bw.write(save_file);
+				bw.close();
+				fw.close();
+				System.out.println("Save_File_Success");
+			}
+			catch (IOException e){
+				System.out.println("ファイル書き込みエラー");
+				this.err.setText("Error: ファイルの書き込みに失敗しました");
 			}
 		}
 	}

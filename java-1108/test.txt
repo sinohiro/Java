@@ -1,1 +1,3 @@
 vimさいこう
+emacsきらい
+hello

@@ -76,12 +76,15 @@ public class FileReaderTest extends JFrame implements ActionListener {
 			try {
 				FileReader fr = new FileReader(gettext1); // ファイルを開く.
 				BufferedReader br = new BufferedReader(fr);
+				String all = "";
 				String buf;
 				while ((buf = br.readLine()) != null) // 1行読み込み, それがnullでなければ,
 					{
-						this.ta1.setText(buf);
+						all += buf;
+						all += System.getProperty("line.separator");
 						System.out.println("File_Output -> \n" + buf); // bufを処理する(この例では表示するだけ).
 				}
+				this.ta1.setText(all);
 				br.close();
 				fr.close(); // ファイルを閉じる.
 			}
@@ -109,7 +112,6 @@ public class FileReaderTest extends JFrame implements ActionListener {
 	}
 }
 
-
 ユーザー向け解説
 左側に読み込みたいファイル名を拡張子込みで入力してください
 入力した後に下のボタンを押すと右側にファイルの内容が表示されます
@@ -122,9 +124,35 @@ gettextの中に入った文字列と同じ名前のファイルの内容を右�
 
 3. 課題2を改良しテキストエディタ(仮)の作成
 保存機能に関する部分のソースコード: TextEditor.java
+if (ae.getSource() == this.button2) {
+			String save_name = this.tf1.getText();
+			String save_file = this.ta1.getText();
+
+			try {
+				FileWriter fw = new FileWriter(save_name);
+				BufferedWriter bw = new BufferedWriter(fw);
+				bw.write(save_file);
+				bw.close();
+				fw.close();
+				System.out.println("Save_File_Success");
+			}
+			catch (IOException e){
+				System.out.println("ファイル書き込みエラー");
+				this.err.setText("Error: ファイルの書き込みに失敗しました");
+			}
+		}
+
 
 保存機能のユーザー向け解説,
+file_Saveボタンを押すとボタン左側の四角いテキストボックスに入力した文字が保存されます
+ファイル書き込みに問題がある場合はエラー文が表示されます。書き込み先ファイルの確認を
+行ってください。
 
 保存機能に関する部分の開発者向け解説
+tf1の内容をgetTextし、ファイル名の取得
+ta1の内容をgetTextし、ファイル内容をそれぞれ取得する。
+それをfileWriterを使ってファイルに書き込む
+正しくファイルを書き込めなかった場合はエラーが出るようになっている
 
-4.
+4.自由作品
+ソースコード: FreeFrame3.java

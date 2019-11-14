@@ -46,12 +46,15 @@ public class FileReaderTest extends JFrame implements ActionListener {
 			try {
 				FileReader fr = new FileReader(gettext1); // ファイルを開く.
 				BufferedReader br = new BufferedReader(fr);
+				String all = "";
 				String buf;
 				while ((buf = br.readLine()) != null) // 1行読み込み, それがnullでなければ,
 					{
-						this.ta1.setText(buf);
+						all += buf;
+						all += System.getProperty("line.separator");
 						System.out.println("File_Output -> \n" + buf); // bufを処理する(この例では表示するだけ).
 				}
+				this.ta1.setText(all);
 				br.close();
 				fr.close(); // ファイルを閉じる.
 			}
