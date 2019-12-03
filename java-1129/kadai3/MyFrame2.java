@@ -64,6 +64,11 @@ public class MyFrame2 extends JFrame implements ChangeListener {
 				this.mp.setTako(this.accels.getValue() - 20);
 				brakel.setText("Tako: " + this.mp.getTako());
 			}
+
+			if (this.mp.getTako() <= 10) {
+				this.mp.setTako(this.accels.getValue() + 2);
+				brakel.setText("Tako: " + this.mp.getTako());
+			}
 		}
 
 		if (e.getSource() == this.brakes) {
