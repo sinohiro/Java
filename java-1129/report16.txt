@@ -1,1 +1,387 @@
 4J 21番 篠田 裕人 テーマ16 レポート
+
+1. 円や四角形等のグラフィックスを描くプログラム
+ソース: MyFrame.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.io.*;
+
+public class MyFrame extends JFrame{
+	private MyPanel mp;// MyFrame HAS-A MyPanel の関係を構築
+
+	public MyFrame() {
+		this.mp = new MyPanel();
+		getContentPane().add(this.mp);
+	}
+	public static void main(String[] args){
+		JFrame mainFrame = new JFrame("4J_21_shinodaApp");
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		MyFrame a = new MyFrame();
+		a.setTitle("4J_21_shinodaApp_MyTextEditer_Progrram");
+		a.setSize(1280, 720);
+		a.setLocation(100, 100);
+		a.setVisible(true);
+		a.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		a.addWindowListener(new WindowAdapter(){
+		public void windowClosing(WindowEvent e){
+			System.exit(0);
+			}
+		});
+	}
+}
+
+ソース: MyPanel.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.io.*;
+
+public class MyPanel extends JPanel {
+	public MyPanel() {
+		setBackground(Color.white); // 背景を白に設定
+		setPreferredSize(new Dimension(640, 480)); // 大きさを640x480に設定
+	}
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g); // まずJPanelのデフォルトの描画処理(背景色でクリア)を行い,
+		g.drawLine(50, 50, 100, 100); // その後, 独自の図形を描画する
+		g.drawOval(32, 16, 256, 128);
+		g.drawString("文字列をグラフィックスとして表示", 48, 48);
+	}
+}
+
+開発者向け解説をレポート
+JPanelクラスを継承した描画パネルクラスを作成し
+Graphicsクラスを使用して
+drowLineで線を描く
+drowOvalで楕円を描く
+drowStringで文字を描く
+以上のことを行いました
+
+2. JTextFieldとJSliderを連携させるプログラム
+ソース: SliderTest.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+
+public class SliderTest extends JFrame implements ChangeListener {
+	private JSlider slider;
+	private JLabel sp;
+
+	public SliderTest() {
+		super();
+		this.slider = new JSlider();
+		this.sp = new JLabel();
+		sp.setText("SliderPoint: " + slider.getValue());
+
+		JPanel panel1 = new JPanel();
+		panel1.setLayout(new FlowLayout());
+		panel1.add(this.slider);
+		panel1.add(this.sp);
+
+		getContentPane().add(panel1);
+		this.slider.addChangeListener(this);
+	}
+
+	public void stateChanged(ChangeEvent e) {
+		sp.setText("SliderPoint: " + slider.getValue());
+	}
+
+public static void main(String[] args) {
+		JFrame mainFrame = new JFrame("4J_21_shinodaApp");
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		SliderTest a = new SliderTest();
+		a.setTitle("4J_21_shinodaApp");
+		a.setSize(1280, 720);
+		a.setLocation(100, 100);
+		a.setVisible(true);
+		a.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		a.addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent e){
+				System.exit(0);
+			}
+		});
+	}
+}
+
+開発者向け解説をレポート
+JSliderとJLabelを使用しスライダーの値をラベルで表示するプログラムを作成しました
+sliderの値(sp)をgetValue()で読み取り読み取った値をsetTextで表示しました
+
+3. 自由課題
+ソース: MyPanel2.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.io.*;
+
+public class MyPanel2 extends JPanel {
+
+	private int accel = 0;
+	private int tako = 8;
+	private int red = 255;
+	private int green = 255;
+	private int blue = 255;
+
+	public void setAccel(int accel){
+		this.accel = 2 * accel;
+	}
+
+	public int getAccel(){
+		return this.accel;
+	}
+
+	public void setTako(int tako){
+		this.tako = 4 * tako;
+	}
+
+	public int getTako(){
+		return this.tako;
+	}
+
+	public void setRed(int red){
+		this.red = red;
+	}
+
+	public void setGreen(int green){
+		this.green = green;
+	}
+
+	public void setBlue(int blue){
+		this.blue = blue;
+	}
+
+	public MyPanel2() {
+		super();
+		setBackground(Color.white); // 背景を白に設定
+		setPreferredSize(new Dimension(640, 480)); // 大きさを640x480に設定
+	}
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g); // まずJPanelのデフォルトの描画処理(背景色でクリア)を行い,
+		g.drawString("なんちゃってタコメータ", 100, 100);
+		g.drawString("なんちゃってスピードメータ", 500, 450);
+
+		//tacho_meter
+		g.drawArc(100, 100, 500, 500, 200, -200);
+		g.fillArc(100, 100, 500, 500, 200, -tako);
+		g.drawString("0X1000rpm", 100, 450);
+		g.drawString("1", 80, 350);
+		g.drawString("2", 100, 250);
+		g.drawString("3", 150, 170);
+		g.drawString("4", 220, 120);
+		g.drawString("5", 300, 90);
+		g.drawString("6", 390, 90);
+		g.drawString("7", 480, 120);
+		g.drawString("8", 550, 180);
+		g.drawString("9", 600, 270);
+		g.drawString("10", 610, 350);
+		g.setColor(Color.red);
+		g.fillArc(100, 100, 500, 500, 0, 20);
+
+		//speed_meter
+		g.setColor(Color.darkGray);
+		g.drawArc(700, 100, 500, 500, 200, -200);
+		g.fillArc(700, 100, 500, 500, 200, -accel);
+		g.drawString("0km/h", 700, 450);
+		g.drawString("20", 680, 350);
+		g.drawString("40", 700, 250);
+		g.drawString("60", 750, 160);
+		g.drawString("80", 860, 100);
+		g.drawString("100", 1000, 90);
+		g.drawString("120", 1120, 150);
+		g.drawString("140", 1190, 260);
+		g.drawString("160", 1210, 360);
+
+		//BGColor
+		setBackground(new Color(red, green, blue));
+	}
+}
+
+ソース: MyFrame2.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.io.*;
+
+public class MyFrame2 extends JFrame implements ChangeListener {
+	private MyPanel2 mp;// MyFrame2 HAS-A MyPanel の関係を構築
+	private JLabel	label;
+	private JSlider accels;
+	private JLabel	accell;
+	private JSlider brakes;
+	private JLabel	brakel;
+	private JSlider	reds;
+	private JLabel	redl;
+	private JSlider	greens;
+	private JLabel	greenl;
+	private JSlider	blues;
+	private JLabel	bluel;
+
+	public MyFrame2() {
+		super();
+		this.mp = new MyPanel2();
+		this.label = new JLabel();
+		this.accels = new JSlider(0, 100, 0);
+		this.accell = new JLabel();
+		this.reds = new JSlider(0, 255, 255);
+		this.redl = new JLabel();
+		this.greens = new JSlider(0, 255, 255);
+		this.greenl = new JLabel();
+		this.blues = new JSlider(0, 255, 255);
+		this.bluel = new JLabel();
+		label.setText("Background Color ");
+		accell.setText("accel: " + accels.getValue());
+		redl.setText("red: " + reds.getValue());
+		greenl.setText("green" + greens.getValue());
+		bluel.setText("blue" + blues.getValue());
+
+		JPanel accel = new JPanel();
+		accel.add(this.accels);
+		accel.add(this.accell);
+
+		JPanel red = new JPanel();
+		red.add(this.reds);
+		red.add(this.redl);
+
+		JPanel green = new JPanel();
+		green.add(this.greens);
+		green.add(this.greenl);
+
+		JPanel blue = new JPanel();
+		blue.add(this.blues);
+		blue.add(this.bluel);
+
+		JPanel pedal = new JPanel();
+		pedal.setLayout(new BoxLayout(pedal, BoxLayout.PAGE_AXIS));
+		pedal.add(accel);
+
+		JPanel BGColor = new JPanel();
+		BGColor.setLayout(new BoxLayout(BGColor, BoxLayout.PAGE_AXIS));
+	  BGColor.add(this.label);
+		BGColor.add(red);
+		BGColor.add(green);
+		BGColor.add(blue);
+
+		JPanel input = new JPanel();
+		input.setLayout(new FlowLayout());
+		input.add(pedal);
+		input.add(BGColor);
+
+		JPanel meter = new JPanel();
+		meter.setLayout(new BoxLayout(meter, BoxLayout.PAGE_AXIS));
+		meter.add(this.mp);
+		meter.add(input);
+
+		getContentPane().add(meter);
+		this.accels.addChangeListener(this);
+		this.reds.addChangeListener(this);
+		this.greens.addChangeListener(this);
+		this.blues.addChangeListener(this);
+	}
+
+	public int AtoT(int n) {
+		int ans = n;
+		if (n >= 45){
+			ans = n -20;
+			ans = AtoT(ans);
+		}
+		return(ans);
+	}
+
+	public void stateChanged(ChangeEvent e) {
+		if (e.getSource() == this.accels) {
+			this.mp.setAccel(this.accels.getValue());
+			accell.setText("accel: " + accels.getValue());
+			this.mp.setTako(AtoT(this.accels.getValue()));
+
+			if (this.mp.getTako() >= 180) {
+				this.mp.setTako(this.accels.getValue() - 20);
+			}
+		}
+
+		if (this.mp.getTako() <= 10) {
+			this.mp.setTako(this.accels.getValue() + 2);
+		}
+		if (e.getSource() == this.reds) {
+			this.mp.setRed(this.reds.getValue());
+			redl.setText("Red: " + reds.getValue());
+		}
+
+		if (e.getSource() == this.greens) {
+			this.mp.setGreen(this.greens.getValue());
+			greenl.setText("Green: " + greens.getValue());
+		}
+
+		if (e.getSource() == this.blues) {
+			this.mp.setBlue(this.blues.getValue());
+			bluel.setText("Blue: " + blues.getValue());
+		}
+	this.mp.repaint();
+	}
+
+	public static void main(String[] args){
+		JFrame mainFrame = new JFrame("4J_21_shinodaApp");
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		MyFrame2 a = new MyFrame2();
+		a.setTitle("4J_21_shinodaApp");
+		a.setSize(1280, 720);
+		a.setLocation(100, 100);
+		a.setVisible(true);
+		a.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		a.addWindowListener(new WindowAdapter(){
+		public void windowClosing(WindowEvent e){
+			System.exit(0);
+			}
+		});
+	}
+}
+
+ユーザー向け解説
+JavaのGraphicsクラスでなんちゃってタコメータとなんちゃってスピードメータを作りました
+accelのスライドバーを上げると車のメータのようにメータが動きます
+Background Colorのred, green, blueの値を変更するとメーターの後ろの色が変わります。
+お好きな色で車のなんちゃって加速をお楽しみください。
+
+※なんちゃっての理由はタコメータがaccelの4倍の値を使っていること
+スピードメータがaccelの2倍の値を使用しているためです。
+
+開発者向け解説
+タコメータとスピードメータはgraphicsクラスのdrawArcを外枠としてfillArcをメータの針として使用し、それぞれ表現しています
+
+fillArcの角度の最後の値をスライドバーの値と連携して可変します
+タコメータはaccelの値を4倍の値を使用しスピードメータはaccelの値を2倍の値を使っています。なんちゃっての部分はここです。
+
+各メータのメモリはdrawStringで表現しています
+
+Backgroundは
+red, green, blueそれぞれの値のセッターを作成しその値を
+setBackgroundにnew Color(red, green, blue)で値を渡し実装しています
+
+4.まとめ
+円弧を描画について
+引用元: https://www.javadrive.jp/applet/graphics/index6.html
+
+drawArcを使うと円弧が描画できます
+書き方はpaintComponent(g)とJPanelのデフォルトの描画処理行い
+その後
+g.drawArc(描画される孤の左上隅の x 座標,
+描画される孤の左上隅の y 座標,
+描画される孤の幅,
+描画される孤の高さ,
+開始角度,
+開始角度に対する弧の展開角度の大きさ)
+をそれぞれint型で記述する
+
+色の指定について
+引用元: https://www.javadrive.jp/applet/graphics/index3.html
+
+setColorを使うと色の指定ができます
+下記のように記入するとセットしたあとの描画の色が変わります
+setColor(new Color(赤色成分, 緑色成分, 青色成分))
+
+
