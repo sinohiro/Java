@@ -4,14 +4,45 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.io.*;
 
-public class MouseMotionPanel extends JPanel {
+
+public class MouseMotionPanel extends JPanel implements MouseMotionListener  {
+	private int bxpoint;					//Before X Point
+	private int bypoint;					//Before Y Point
+	private int axpoint;					//After X Point
+	private int aypoint;					//After Y Point
+	private int hutosa;
+
 	public MouseMotionPanel() {
+		super();
+		this.bxpoint = 0;
+		this.bypoint = 0;
+		this.axpoint = 0;
+		this.aypoint = 0;
+		this.hutosa = 0;
+
 		setBackground(Color.white); // 背景を白に設定
 		setPreferredSize(new Dimension(640, 480)); // 大きさを640x480に設定
+		this.addMouseMotionListener(this);
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g); // まずJPanelのデフォルトの描画処理(背景色でクリア)を行い,
 		g.drawString("マウスでお絵描きしてね", 48, 48);
+	}
+	public void mouseMoved(MouseEvent e) {
+		this.bxpoint = e.getX();	// マウスカーソルのX座標と
+		this.bypoint = e.getY();	// Y座標を調べ
+	}
+	public void mouseDragged(MouseEvent e) {
+		this.axpoint = e.getX();
+		this.aypoint = e.getY();
+		Graphics g = this.getGraphics();	// OSからペンを借り
+		Graphics2D g2 = (Graphics2D)g;
+		BasicStroke bs = new BasicStroke(this.hutosa);
+		g2.setStroke(bs);
+		g.drawLine(bxpoint, bypoint, axpoint, aypoint);
+		g.dispose();
+		this.bxpoint = e.getX();
+		this.bypoint = e.getY();
 	}
 }
 

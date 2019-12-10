@@ -4,22 +4,18 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.io.*;
 
-public class MouseMotionFreme extends JFrame implements MouseMotionListener, ChangeListener{
+public class MouseMotionFreme extends JFrame implements ChangeListener{
 	private MouseMotionPanel mp;// MouseMotionFreme HAS-A MyPanel の関係を構築
 	private JSlider hutosas;
-	private JLabel¦_hutosal;
-	private int bxpoint;					//Before X Point
-	private int bypoint;					//Before Y Point
-	private int axpoint;					//After X Point
-	private int aypoint;					//After Y Point
+	private JLabel	hutosal;
+	private int hutosa;
 
 	public MouseMotionFreme() {
 		super();
 		this.mp = new MouseMotionPanel();
-		this.bxpoint = 0;
-		this.bypoint = 0;
-		this.axpoint = 0;
-		this.aypoint = 0;
+		this.hutosas = new JSlider(0, 16, 0);
+		this.hutosal = new JLabel("hutosa: " + hutosas.getValue());
+		this.hutosa = 0;
 
 		JPanel hutosa = new JPanel();
 		hutosa.setLayout(new FlowLayout());
@@ -28,38 +24,22 @@ public class MouseMotionFreme extends JFrame implements MouseMotionListener, Cha
 
 		JPanel tool = new JPanel();
 		tool.setLayout(new FlowLayout());
-		tool.add(this.hutosa);
+		tool.add(hutosa);
 
 		JPanel oekaki = new JPanel();
-		oekaki.setLayout(new BoxLayout(meter, BoxLayout.PAGE_AXIS));
+		oekaki.setLayout(new BoxLayout(oekaki, BoxLayout.PAGE_AXIS));
 		oekaki.add(this.mp);
 		oekaki.add(tool);
 
-		getContentPane().add(this.mp);
-		this.addMouseMotionListener(this);
+		getContentPane().add(oekaki);
 		this.hutosas.addChangeListener(this);
 	}
 
 	public void stateChanged(ChangeEvent e) {
-		if (e.getSource() == this.accels) {
-			this.mp.setAccel(this.accels.getValue());
-			accell.setText("accel: " + accell.getValue());
-			this.mp.setTako(AtoT(this.accels.getValue()));
+		if (e.getSource() == this.hutosas) {
+			this.hutosa = this.hutosas.getValue();
+			hutosal.setText("hutosa: " + hutosas.getValue());
 		}
-	}
-
-	public void mouseMoved(MouseEvent e) {
-		this.bxpoint = e.getX();	// マウスカーソルのX座標と
-		this.bypoint = e.getY();	// Y座標を調べ
-	}
-	public void mouseDragged(MouseEvent e) {
-		this.axpoint = e.getX();
-		this.aypoint = e.getY();
-		Graphics g = this.getGraphics();	// OSからペンを借り
-		g.drawLine(bxpoint, bypoint, axpoint, aypoint);
-		g.dispose();
-		this.bxpoint = e.getX();
-		this.bypoint = e.getY();
 	}
 
 	public static void main(String[] args){
