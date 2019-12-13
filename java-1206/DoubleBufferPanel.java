@@ -3,6 +3,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.io.*;
+import java.applet.Applet;
+import java.awt.Graphics;
+import java.awt.Image;
 
 public class MouseMotionPanel extends JPanel implements MouseMotionListener  {
 	private int bxpoint;					//Before X Point
@@ -13,6 +16,8 @@ public class MouseMotionPanel extends JPanel implements MouseMotionListener  {
 	private int red = 255;
 	private int green = 255;
 	private int blue = 255;
+	private int width = size.width;
+	private int height = size.height;
 
 	public MouseMotionPanel() {
 		super();
@@ -24,6 +29,8 @@ public class MouseMotionPanel extends JPanel implements MouseMotionListener  {
 		this.red = 0;
 		this.green = 0;
 		this.blue = 0;
+
+		ufferedImage bi = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_BGR);
 
 		setBackground(Color.white); // 背景を白に設定
 		setPreferredSize(new Dimension(640, 480)); // 大きさを640x480に設定
@@ -44,6 +51,14 @@ public class MouseMotionPanel extends JPanel implements MouseMotionListener  {
 
 	public void setBlue(int blue){
 		this.blue = blue;
+	}
+
+	public void windowsize(Graphics g){
+		Dimension size = getSize();
+		this.width = size.width;
+		this.height = size.height;
+		System.out.println("Change Width -> " + this.width);
+		System.out.println("Change Height -> " + this.height);
 	}
 
 	public void paintComponent(Graphics g) {
