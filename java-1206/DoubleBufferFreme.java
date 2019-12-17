@@ -4,8 +4,8 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.io.*;
 
-public class MouseMotionFreme extends JFrame implements ChangeListener{
-	private MouseMotionPanel mp;// MouseMotionFreme HAS-A MyPanel の関係を構築
+public class DoubleBufferFreme extends JFrame implements ChangeListener ActionListener{
+	private DoubleBufferPanel mp;// DoubleBufferFreme HAS-A MyPanel の関係を構築
 	private JSlider hutosas;
 	private JLabel	hutosal;
 	private JSlider	reds;
@@ -17,9 +17,9 @@ public class MouseMotionFreme extends JFrame implements ChangeListener{
 	private JLabel	RGBlabel;
 	private int hutosa;
 
-	public MouseMotionFreme() {
+	public DoubleBufferFreme() {
 		super();
-		this.mp = new MouseMotionPanel();
+		this.mp = new DoubleBufferPanel();
 		this.hutosas = new JSlider(0, 76, 0);
 		this.hutosal = new JLabel("hutosa: " + hutosas.getValue());
 		this.reds = new JSlider(0, 255, 0);
@@ -75,6 +75,10 @@ public class MouseMotionFreme extends JFrame implements ChangeListener{
 		this.blues.addChangeListener(this);
 	}
 
+	/*public void actionPerformed(ActionEvent ae) {
+		if (ae.getSource() == this.button1) {
+*/
+
 	public void stateChanged(ChangeEvent e) {
 		if (e.getSource() == this.hutosas) {
 			this.mp.setHutosa(this.hutosas.getValue());
@@ -99,7 +103,7 @@ public class MouseMotionFreme extends JFrame implements ChangeListener{
 	public static void main(String[] args){
 		JFrame mainFrame = new JFrame("4J_21_shinodaApp");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		MouseMotionFreme a = new MouseMotionFreme();
+		DoubleBufferFreme a = new DoubleBufferFreme();
 		a.setTitle("4J_21_shinodaApp_MyTextEditer_Progrram");
 		a.setSize(1280, 720);
 		a.setLocation(100, 100);
