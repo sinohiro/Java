@@ -27,4 +27,3 @@ public class MousePanel extends JPanel implements MouseListener{
 	public void mouseEntered(MouseEvent e) {}  // マウスカーソルが部品内に入ったとき
 	public void mouseExited(MouseEvent e) {}   // マウスカーソルが部品外に出たとき
 }
-

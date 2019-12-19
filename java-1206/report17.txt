@@ -1,40 +1,23 @@
 4J 21番 篠田 裕人 テーマ17 レポート
 
 1. マウスでクリックした位置に, スタンプの様に図形が描かれるプログラム
-ソース: MouseTestPanel.java
+ソース: MousePanel.java
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.io.*;
 
-public class MouseTestPanel extends JPanel {
-	public MouseTestPanel() {
+public class MousePanel extends JPanel implements MouseListener{
+	public MousePanel() {
 		setBackground(Color.white); // 背景を白に設定
 		setPreferredSize(new Dimension(640, 480)); // 大きさを640x480に設定
+		this.addMouseListener(this);
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g); // まずJPanelのデフォルトの描画処理(背景色でクリア)を行い,
 		g.drawString("マウスでお絵描きしてね", 48, 48);
 	}
-}
-
-ソース: MouseTestFrame.java
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.io.*;
-
-public class MouseTestFrame extends JFrame implements MouseListener{
-	private MouseTestPanel mp;// MouseTestFrame HAS-A MyPanel の関係を構築
-
-	public MouseTestFrame() {
-		this.mp = new MouseTestPanel();
-		getContentPane().add(this.mp);
-		this.addMouseListener(this);
-	}
-
 	public void mousePressed(MouseEvent e) { // マウスボタンが押されたとき
 		System.out.println("Mouse_Pressed");
 		int x = e.getX();	// マウスカーソルのX座標と
@@ -47,11 +30,27 @@ public class MouseTestFrame extends JFrame implements MouseListener{
 	public void mouseClicked(MouseEvent e) {}  // マウスボタンがクリックされた(押して離された)とき
 	public void mouseEntered(MouseEvent e) {}  // マウスカーソルが部品内に入ったとき
 	public void mouseExited(MouseEvent e) {}   // マウスカーソルが部品外に出たとき
+}
+
+ソース: MouseFrame.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.io.*;
+
+public class MouseFrame extends JFrame {
+	private MousePanel mp;// MouseFrame HAS-A MyPanel の関係を構築
+
+	public MouseFrame() {
+		this.mp = new MousePanel();
+		getContentPane().add(this.mp);
+	}
 
 	public static void main(String[] args){
 		JFrame mainFrame = new JFrame("4J_21_shinodaApp");
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		MouseTestFrame a = new MouseTestFrame();
+		MouseFrame a = new MouseFrame();
 		a.setTitle("4J_21_shinodaApp_MyTextEditer_Progrram");
 		a.setSize(1280, 720);
 		a.setLocation(100, 100);
@@ -74,10 +73,451 @@ mousePressed内に書きたい図形をGraphicsクラスのdrawArcメソッド�
 マウスクリック時にそれを実行するようにしている
 
 2. 自由作品(ドラッグで線を途切れることなく引けるプログラム)
-ソース
+ソース: MouseMotionPanel.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.io.*;
+
+public class MouseMotionPanel extends JPanel implements MouseMotionListener  {
+	private int bxpoint;					//Before X Point
+	private int bypoint;					//Before Y Point
+	private int axpoint;					//After X Point
+	private int aypoint;					//After Y Point
+	private int hutosa;
+	private int red = 255;
+	private int green = 255;
+	private int blue = 255;
+
+	public MouseMotionPanel() {
+		super();
+		this.bxpoint = 0;
+		this.bypoint = 0;
+		this.axpoint = 0;
+		this.aypoint = 0;
+		this.hutosa = 0;
+		this.red = 0;
+		this.green = 0;
+		this.blue = 0;
+
+		setBackground(Color.white); // 背景を白に設定
+		setPreferredSize(new Dimension(640, 480)); // 大きさを640x480に設定
+		this.addMouseMotionListener(this);
+	}
+
+	public void setHutosa(int hutosa){
+		this.hutosa = hutosa;
+	}
+
+	public void setRed(int red){
+		this.red = red;
+	}
+
+	public void setGreen(int green){
+		this.green = green;
+	}
+
+	public void setBlue(int blue){
+		this.blue = blue;
+	}
+
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g); // まずJPanelのデフォルトの描画処理(背景色でクリア)を行い,
+		g.drawString("マウスでお絵描きしてね", 48, 48);
+	}
+	public void mouseMoved(MouseEvent e) {
+		this.bxpoint = e.getX();	// マウスカーソルのX座標と
+		this.bypoint = e.getY();	// Y座標を調べ
+	}
+	public void mouseDragged(MouseEvent e) {
+		this.axpoint = e.getX();
+		this.aypoint = e.getY();
+		Graphics g = this.getGraphics();	// OSからペンを借り
+		Graphics2D g2 = (Graphics2D)g;
+		BasicStroke bs = new BasicStroke(this.hutosa);
+		g2.setStroke(bs);
+
+		Color color = new Color(this.red, this.green, this.blue);
+		g.setColor(color);
+
+		g.drawLine(bxpoint, bypoint, axpoint, aypoint);
+		g.dispose();
+		this.bxpoint = e.getX();
+		this.bypoint = e.getY();
+	}
+}
+
+ソース: MouseMotionFrame.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.io.*;
+
+public class MouseMotionFreme extends JFrame implements ChangeListener{
+	private MouseMotionPanel mp;// MouseMotionFreme HAS-A MyPanel の関係を構築
+	private JSlider hutosas;
+	private JLabel	hutosal;
+	private JSlider	reds;
+	private JLabel	redl;
+	private JSlider	greens;
+	private JLabel	greenl;
+	private JSlider	blues;
+	private JLabel	bluel;
+	private JLabel	RGBlabel;
+	private int hutosa;
+
+	public MouseMotionFreme() {
+		super();
+		this.mp = new MouseMotionPanel();
+		this.hutosas = new JSlider(0, 76, 0);
+		this.hutosal = new JLabel("hutosa: " + hutosas.getValue());
+		this.reds = new JSlider(0, 255, 0);
+		this.redl = new JLabel("red: " + reds.getValue());
+		this.greens = new JSlider(0, 255, 0);
+		this.greenl = new JLabel("green: " + greens.getValue());
+		this.blues = new JSlider(0, 255, 0);
+		this.bluel = new JLabel("blue: " + blues.getValue());
+		this.hutosa = 0;
+		this.RGBlabel = new JLabel("Pen Color");
+
+		JPanel hutosa = new JPanel();
+		hutosa.setLayout(new FlowLayout());
+		hutosa.add(this.hutosas);
+		hutosa.add(this.hutosal);
+
+		JPanel red = new JPanel();
+		red.setLayout(new FlowLayout());
+		red.add(this.reds);
+		red.add(this.redl);
+
+		JPanel green = new JPanel();
+		green.setLayout(new FlowLayout());
+		green.add(this.greens);
+		green.add(this.greenl);
+
+		JPanel blue = new JPanel();
+		blue.setLayout(new FlowLayout());
+		blue.add(this.blues);
+		blue.add(this.bluel);
+
+		JPanel RGB = new JPanel();
+		RGB.setLayout(new BoxLayout(RGB, BoxLayout.PAGE_AXIS));
+	  RGB.add(this.RGBlabel);
+		RGB.add(red);
+		RGB.add(green);
+		RGB.add(blue);
+
+		JPanel tool = new JPanel();
+		tool.setLayout(new FlowLayout());
+		tool.add(hutosa);
+		tool.add(RGB);
+
+		JPanel oekaki = new JPanel();
+		oekaki.setLayout(new BoxLayout(oekaki, BoxLayout.PAGE_AXIS));
+		oekaki.add(this.mp);
+		oekaki.add(tool);
+
+		getContentPane().add(oekaki);
+		this.hutosas.addChangeListener(this);
+		this.reds.addChangeListener(this);
+		this.greens.addChangeListener(this);
+		this.blues.addChangeListener(this);
+	}
+
+	public void stateChanged(ChangeEvent e) {
+		if (e.getSource() == this.hutosas) {
+			this.mp.setHutosa(this.hutosas.getValue());
+			hutosal.setText("hutosa: " +this. hutosas.getValue());
+		}
+
+		if (e.getSource() == this.reds) {
+			this.mp.setRed(this.reds.getValue());
+			redl.setText("Red: " + reds.getValue());
+		}
+
+		if (e.getSource() == this.greens) {
+			this.mp.setGreen(this.greens.getValue());
+			greenl.setText("Green: " + greens.getValue());
+		}
+		if (e.getSource() == this.blues) {
+			this.mp.setBlue(this.blues.getValue());
+			bluel.setText("Blue: " + blues.getValue());
+		}
+	}
+
+	public static void main(String[] args){
+		JFrame mainFrame = new JFrame("4J_21_shinodaApp");
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		MouseMotionFreme a = new MouseMotionFreme();
+		a.setTitle("4J_21_shinodaApp_MyTextEditer_Progrram");
+		a.setSize(1280, 720);
+		a.setLocation(100, 100);
+		a.setVisible(true);
+		a.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		a.addWindowListener(new WindowAdapter(){
+		public void windowClosing(WindowEvent e){
+			System.exit(0);
+			}
+		});
+	}
+}
 
 ユーザー向け解説
+マウスで好きなものを描くことができます
+hutosaのスライダーでペンの太さを変えられます
+Pen ColorのRGB値を変更すると好きなペンの色に変更できます
 
 セールスポイント
+・hutosaでペンの太さ変更可能
+・Pen ColorのRGBスライダーでペンの色が変更可能
+・ウインドウサイズに合わせて描画パネルのサイズを変更
 
 開発者向け解説
+・hutosaとPen ColorのRGBの値をセッターを使って描画パネルに値を渡して
+それぞれの機能を実装しています
+
+・描画パネルのサイズ変更はBoxLayoutを使用して実装しています
+
+3. ダブルバッファ方式
+ソース: DoubleBufferPanel.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.io.*;
+import java.applet.Applet;
+import java.awt.Graphics;
+import java.awt.image.*;
+import java.awt.Dimension;
+
+public class DoubleBufferPanel extends JPanel implements MouseMotionListener  {
+	private int bxpoint;					//Before X Point
+	private int bypoint;					//Before Y Point
+	private int axpoint;					//After X Point
+	private int aypoint;					//After Y Point
+	private int hutosa;
+	private int red;
+	private int green;
+	private int blue;
+	private int width;
+	private int height;
+	private BufferedImage bi;
+
+	public DoubleBufferPanel() {
+		super();
+		this.bxpoint = 0;
+		this.bypoint = 0;
+		this.axpoint = 0;
+		this.aypoint = 0;
+		this.hutosa = 0;
+		this.red = 0;
+		this.green = 0;
+		this.blue = 0;
+		this.width = 1980;
+		this.height = 1080;
+		this.bi = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_ARGB);
+
+		setBackground(Color.white); // 背景を白に設定
+		setPreferredSize(new Dimension(640, 480)); // 大きさを640x480に設定
+		this.addMouseMotionListener(this);
+	}
+
+	public void setHutosa(int hutosa){
+		this.hutosa = hutosa;
+	}
+
+	public void setRed(int red){
+		this.red = red;
+	}
+
+	public void setGreen(int green){
+		this.green = green;
+	}
+
+	public void setBlue(int blue){
+		this.blue = blue;
+	}
+
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g); // まずJPanelのデフォルトの描画処理(背景色でクリア)を行い,
+		g.drawString("マウスでお絵描きしてね", 48, 48);
+		g.drawImage(this.bi, 0, 0, this);
+	}
+	public void mouseMoved(MouseEvent e) {
+		this.bxpoint = e.getX();	// マウスカーソルのX座標と
+		this.bypoint = e.getY();	// Y座標を調べ
+	}
+	public void mouseDragged(MouseEvent e) {
+		this.axpoint = e.getX();
+		this.aypoint = e.getY();
+		Graphics g = this.bi.getGraphics();// OSからペンを借り
+		this.repaint();
+		Graphics2D g2 = (Graphics2D)g;
+		BasicStroke bs = new BasicStroke(this.hutosa);
+		g2.setStroke(bs);
+
+		Color color = new Color(this.red, this.green, this.blue);
+		g.setColor(color);
+
+		g.drawLine(bxpoint, bypoint, axpoint, aypoint);
+		g.dispose();
+		this.bxpoint = e.getX();
+		this.bypoint = e.getY();
+	}
+}
+
+ソース: DoubleBufferFreme.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.io.*;
+
+public class DoubleBufferFreme extends JFrame implements ChangeListener {
+	private final DoubleBufferPanel mp;// DoubleBufferFreme HAS-A MyPanel の関係を構築
+	private final JSlider hutosas;
+	private final JLabel	hutosal;
+	private final JSlider	reds;
+	private final JLabel	redl;
+	private final JSlider	greens;
+	private final JLabel	greenl;
+	private final JSlider	blues;
+	private final JLabel	bluel;
+	private final JLabel	RGBlabel;
+	private final int hutosa;
+
+	public DoubleBufferFreme() {
+		super();
+		this.mp = new DoubleBufferPanel();
+		this.hutosas = new JSlider(0, 76, 0);
+		this.hutosal = new JLabel("hutosa: " + hutosas.getValue());
+		this.reds = new JSlider(0, 255, 0);
+		this.redl = new JLabel("red: " + reds.getValue());
+		this.greens = new JSlider(0, 255, 0);
+		this.greenl = new JLabel("green: " + greens.getValue());
+		this.blues = new JSlider(0, 255, 0);
+		this.bluel = new JLabel("blue: " + blues.getValue());
+		this.hutosa = 0;
+		this.RGBlabel = new JLabel("Pen Color");
+
+		final JPanel hutosa = new JPanel();
+		hutosa.setLayout(new FlowLayout());
+		hutosa.add(this.hutosas);
+		hutosa.add(this.hutosal);
+
+		final JPanel red = new JPanel();
+		red.setLayout(new FlowLayout());
+		red.add(this.reds);
+		red.add(this.redl);
+
+		final JPanel green = new JPanel();
+		green.setLayout(new FlowLayout());
+		green.add(this.greens);
+		green.add(this.greenl);
+
+		final JPanel blue = new JPanel();
+		blue.setLayout(new FlowLayout());
+		blue.add(this.blues);
+		blue.add(this.bluel);
+
+		final JPanel RGB = new JPanel();
+		RGB.setLayout(new BoxLayout(RGB, BoxLayout.PAGE_AXIS));
+	  	RGB.add(this.RGBlabel);
+		RGB.add(red);
+		RGB.add(green);
+		RGB.add(blue);
+
+		final JPanel tool = new JPanel();
+		tool.setLayout(new FlowLayout());
+		tool.add(hutosa);
+		tool.add(RGB);
+
+		final JPanel oekaki = new JPanel();
+		oekaki.setLayout(new BoxLayout(oekaki, BoxLayout.PAGE_AXIS));
+		oekaki.add(this.mp);
+		oekaki.add(tool);
+
+		getContentPane().add(oekaki);
+		this.hutosas.addChangeListener(this);
+		this.reds.addChangeListener(this);
+		this.greens.addChangeListener(this);
+		this.blues.addChangeListener(this);
+	}
+
+	public void stateChanged(final ChangeEvent e) {
+		if (e.getSource() == this.hutosas) {
+			this.mp.setHutosa(this.hutosas.getValue());
+			hutosal.setText("hutosa: " +this. hutosas.getValue());
+		}
+
+		if (e.getSource() == this.reds) {
+			this.mp.setRed(this.reds.getValue());
+			redl.setText("Red: " + reds.getValue());
+		}
+
+		if (e.getSource() == this.greens) {
+			this.mp.setGreen(this.greens.getValue());
+			greenl.setText("Green: " + greens.getValue());
+		}
+		if (e.getSource() == this.blues) {
+			this.mp.setBlue(this.blues.getValue());
+			bluel.setText("Blue: " + blues.getValue());
+		}
+	}
+
+	public static void main(final String[] args){
+		final JFrame mainFrame = new JFrame("4J_21_shinodaApp");
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		final DoubleBufferFreme a = new DoubleBufferFreme();
+		a.setTitle("4J_21_shinodaApp_MyTextEditer_Progrram");
+		a.setSize(1280, 720);
+		a.setLocation(100, 100);
+		a.setVisible(true);
+		a.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		a.addWindowListener(new WindowAdapter(){
+		public void windowClosing(final WindowEvent e){
+			System.exit(0);
+			}
+		});
+	}
+}
+
+どこ(where)
+・描画パネルのコンストラクタ
+・ペンの書き込み先
+・paintComponent内
+
+なぜ(why)
+ウインドウサイズを変更する際にthisに直接書き込むと書き込んだデータが保持されないため消えてしまう
+そのためダブルバッファ方式を取り入れウインドウサイズが変更された際にバッファを転写できるようにする
+
+どの様に(how)
+描画パネルにBufferedImageクラスのインスタンス(bi)を作成
+ペンの書き込み先をthisからbiに変更する
+すぐthisに対してrepaint()を実行しpaintComponent内のdrawImageでthisにbiを転写する
+
+3. マニュアル
+直線を描画について
+引用元: https://www.javadrive.jp/applet/graphics/index4.html
+
+drawLineを使うと線を書くことができます
+書き方はpaintComponent(g)とJPanelのデフォルトの描画処理行い
+その後
+g.drawLine(最初の点の x 座標,
+最初の点の y 座標,
+2 番目の点の x 座標,
+2 番目の点の y 座標)
+をそれぞれint型で記述する
+
+図形等の線幅や線の変更について
+引用元: https://nompor.com/2017/12/04/post-1532/
+
+BasicStrokeクラスを使うと線幅を変えることができます
+書き方はpaintComponent(g)とJPanelのデフォルトの描画処理行い
+その後
+Graphics2D g2 = (Graphics2D)g;
+BasicStroke bs = new BasicStroke(5);
+g2.setStroke(bs);
+その後にg.drawLineなどを使うことで線の太さを変更できます

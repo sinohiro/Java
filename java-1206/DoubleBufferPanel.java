@@ -68,7 +68,6 @@ public class DoubleBufferPanel extends JPanel implements MouseMotionListener  {
 	public void mouseDragged(MouseEvent e) {
 		this.axpoint = e.getX();
 		this.aypoint = e.getY();
-		System.out.println(this.aypoint);
 		Graphics g = this.bi.getGraphics();// OSからペンを借り
 		this.repaint();
 		Graphics2D g2 = (Graphics2D)g;
