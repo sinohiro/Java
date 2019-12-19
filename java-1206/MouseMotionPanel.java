@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.io.*;
 
-public class MouseMotionPanel extends JPanel implements MouseMotionListener  {
+public class MouseMotionPanel extends JPanel implements MouseMotionListener, MouseListener  {
 	private int bxpoint;					//Before X Point
 	private int bypoint;					//Before Y Point
 	private int axpoint;					//After X Point
@@ -28,6 +28,7 @@ public class MouseMotionPanel extends JPanel implements MouseMotionListener  {
 		setBackground(Color.white); // 背景を白に設定
 		setPreferredSize(new Dimension(640, 480)); // 大きさを640x480に設定
 		this.addMouseMotionListener(this);
+		this.addMouseListener(this);
 	}
 
 	public void setHutosa(int hutosa){
@@ -54,6 +55,17 @@ public class MouseMotionPanel extends JPanel implements MouseMotionListener  {
 		this.bxpoint = e.getX();	// マウスカーソルのX座標と
 		this.bypoint = e.getY();	// Y座標を調べ
 	}
+
+	public void mousePressed(MouseEvent e) {
+		this.bxpoint = e.getX();	// マウスカーソルのX座標と
+		this.bypoint = e.getY();	// Y座標を調べ
+	}  // マウスボタンが押されたとき
+
+	public void mouseReleased(MouseEvent e) {} // マウスボタンが離されたとき
+	public void mouseClicked(MouseEvent e) {}  // マウスボタンがクリックされた(押して離された)とき
+	public void mouseEntered(MouseEvent e) {}  // マウスカーソルが部品内に入ったとき
+	public void mouseExited(MouseEvent e) {}   // マウスカーソルが部品外に出たとき
+
 	public void mouseDragged(MouseEvent e) {
 		this.axpoint = e.getX();
 		this.aypoint = e.getY();
