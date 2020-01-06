@@ -1,9 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
-import java.io.*;
-import java.awt.image.*;
 import javax.swing.Timer;
 import java.awt.MediaTracker;
 
@@ -15,7 +12,7 @@ public class AnimetionFreme2 extends JFrame implements ActionListener {
 	public AnimetionFreme2() {
 		super();
 		Toolkit tk = Toolkit.getDefaultToolkit();
-		this.timer = new Timer(100, this);
+		this.timer = new Timer(200, this);
 		this.timer.start();
 		Image[] man_array = new Image[4];
 		tracker = new MediaTracker(this);

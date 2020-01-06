@@ -1,0 +1,272 @@
+4J 21番 篠田 裕人 テーマ18 レポート
+
+1. 画像を描画するプログラム
+ソース:ImagePanel.java
+import java.awt.*;
+import javax.swing.*;
+import java.awt.Graphics;
+import java.awt.Dimension;
+
+public class ImagePanel extends JPanel {
+	private Image man;
+
+	public ImagePanel(Image man) {
+		super();
+		this.man = man;
+
+		setBackground(Color.white); // 背景を白に設定
+		setPreferredSize(new Dimension(640, 480)); // 大きさを640x480に設定
+	}
+
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g); // まずJPanelのデフォルトの描画処理(背景色でクリア)を行い,
+		g.drawImage(this.man, 100, 100, this);
+	}
+}
+
+ソース:ImageFreme.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.io.*;
+import java.awt.image.*;
+
+public class ImageFreme extends JFrame {
+	private ImagePanel mp;// ImageFreme HAS-A MyPanel の関係を構築
+
+	public ImageFreme() {
+		super();
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Image man = tk.getImage("man0.png");
+		this.mp = new ImagePanel(man);
+
+		JPanel image = new JPanel();
+		image.setLayout(new BoxLayout(image, BoxLayout.PAGE_AXIS));
+		image.add(this.mp);
+
+		getContentPane().add(image);
+	}
+
+	public static void main(String[] args){
+		JFrame mainFrame = new JFrame("4J_21_shinodaApp");
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		ImageFreme a = new ImageFreme();
+		a.setTitle("4J_21_shinodaApp_Progrram");
+		a.setSize(1280, 720);
+		a.setLocation(100, 100);
+		a.setVisible(true);
+		a.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		a.addWindowListener(new WindowAdapter(){
+		public void windowClosing(WindowEvent e){
+			System.exit(0);
+			}
+		});
+	}
+}
+
+開発者向け解説
+Ⅰ. どこで何を読み込み
+toolkitで画像ファイルをImageFremeのコンストラクタで読み込む
+
+Ⅱ. どこからどこへ何を渡し
+ImageFremeのコンストラクタに読み込んだ画像ファイルを引数としてImagePanel.javaに渡す
+
+Ⅲ. どこに保存しておき
+引数として渡された画像ファイルをImagePanel.javaのフィールドに保存する
+
+Ⅳ. どのタイミングでどのメソッドが呼ばれ
+getContentPane
+
+Ⅴ. 何を描画する
+画像ファイルがdrawImageによって描画される
+
+
+2. 画像ファイルを複数読み込み, 適当な固定位置にそれらの画像を全て同時に描画するプログラム
+ソース:ImageHukusuuPanel.java
+public class ImageHukusuuPanel extends JPanel {
+	private Image[] man_array;
+
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g); // まずJPanelのデフォルトの描画処理(背景色でクリア)を行い,
+		for (int i = 0; i < 4; i++){
+			g.drawImage(this.man_array[i], i * 100, 100, this);
+		}
+	}
+}
+
+ソース:ImageHukusuuFreme.java
+public ImageHukusuuFreme() {
+	super();
+	Toolkit tk = Toolkit.getDefaultToolkit();
+	Image[] man_array = new Image[4];
+	for (int i = 0; i < 4; i++){
+	    man_array[i] = tk.getImage("man" + i + ".png");
+	}
+	this.mp = new ImageHukusuuPanel(man_array);
+
+	JPanel image = new JPanel();
+	image.setLayout(new BoxLayout(image, BoxLayout.PAGE_AXIS));
+	image.add(this.mp);
+
+	getContentPane().add(image);
+}
+
+開発者向け解説
+課題1との違い
+.Image型が配列になっていること
+.画像を読み込む処理がfor文を使って複数の画像を配列に読み込む様になっていること
+.複数の配列に読み込んだ画像ファイルを引数としてImageHukusuuPanel.javaに渡していること
+.渡された複数の画像が読み込まれている配列をfor文を用いてそれぞれx座標を変更して描画している
+
+3. Timerクラスを用いて画像のアニメーション表示を行うプログラム
+ソース:AnimetionPanel2.java
+import java.awt.*;
+import javax.swing.*;
+import java.awt.Graphics;
+import java.awt.Dimension;
+
+public class AnimetionPanel2 extends JPanel {
+	private Image[] man_array;
+	private int i = 0;
+	private int j = 0;
+	private int k = 0;
+
+	public AnimetionPanel2(Image[] man_array) {
+		super();
+		this.man_array = man_array;
+
+		setBackground(Color.white); // 背景を白に設定
+		setPreferredSize(new Dimension(640, 480)); // 大きさを640x480に設定
+	}
+
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g); // まずJPanelのデフォルトの描画処理(背景色でクリア)を行い,
+		g.drawImage(this.man_array[i], j, k, this);
+		if (i > 2) {
+			i = 0;
+		}else {
+			i++;
+		}
+		if (j > 1280) {
+			j = 0;
+			k += 100;
+		}else{
+			j += 20;
+		}
+		if (k > 620) {
+			k = 0;
+		}
+	}
+}
+
+ソース:AnimetionFreme2.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.Timer;
+import java.awt.MediaTracker;
+
+public class AnimetionFreme2 extends JFrame implements ActionListener {
+	private AnimetionPanel2 mp;// AnimetionFreme2 HAS-A MyPanel の関係を構築
+	private Timer timer;
+	private MediaTracker tracker;
+
+	public AnimetionFreme2() {
+		super();
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		this.timer = new Timer(200, this);
+		this.timer.start();
+		Image[] man_array = new Image[4];
+		tracker = new MediaTracker(this);
+		for (int i = 0; i < 4; i++){
+			man_array[i] = tk.getImage("man" + i + ".png");
+			tracker.addImage(man_array[i], i);
+		}
+
+		this.mp = new AnimetionPanel2(man_array);
+
+		JPanel image = new JPanel();
+		image.setLayout(new BoxLayout(image, BoxLayout.PAGE_AXIS));
+		image.add(this.mp);
+
+		getContentPane().add(image);
+	}
+
+	public void start(){
+			try {
+				tracker.waitForAll();
+			}catch (InterruptedException e) {
+			}
+		}
+
+	public void actionPerformed(ActionEvent e) {
+	    this.mp.repaint();
+	}
+
+	public static void main(String[] args){
+		JFrame mainFrame = new JFrame("4J_21_shinodaApp");
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		AnimetionFreme2 a = new AnimetionFreme2();
+		a.setTitle("4J_21_shinodaApp_Progrram");
+		a.setSize(1280, 720);
+		a.setLocation(100, 100);
+		a.setVisible(true);
+		a.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		a.addWindowListener(new WindowAdapter(){
+		public void windowClosing(WindowEvent e){
+			System.exit(0);
+			}
+		});
+	}
+}
+
+ユーザー向け解説
+Ⅰ.アニメーション内容
+サラリーマンが喜怒哀楽を表しながら横に移動して行くアニメーションです
+
+Ⅱ.セールスポイント
+一番右に行ったとき少し下に段落を変えサラリーマンが移動を繰り返します
+一番下へ行ったときはまた一番上に移動し動作を繰り返します
+
+開発者向け解説
+.一度初期値に一枚目の画像を描画した後forのiの値を+1してx座標を変え
+timer関数でactionPerformedメソッドが呼び出されrepaint()し、次の画像が描画されるようにしている
+
+.画像が移動して表示する際に画面をはみ出さないようにウインドウ初期値サイズで固定ですが
+x座標値を初期化してy座標を+100しています
+
+.MediaTrackerクラスを使用して画像ファイルを読み込んでいるので
+画像が表示されないという現象が発生しない
+
+4. 調査まとめ
+課題1
+どのタイミングでどのメソッドが呼ばれ画像が描画されるのかを調べた
+引用元: https://www.javadrive.jp/tutorial/jframe/index6.html
+paintComponentが呼ばれるときはシステムが要求したときに呼び出される
+自分で任意に呼び出したい場合はrepaint()を行う
+
+課題2
+javaのfor文の使い方
+引用元: https://www.sejuku.net/blog/22219
+for (int i = 0; 条件式; i++) {
+    // 条件式がtrueのときに繰り返す処理をここに書く
+}
+
+課題3
+Timerクラスについて
+引用元: https://docs.oracle.com/javase/jp/8/docs/api/javax/swing/Timer.html
+import javax.swing.Timer
+フィールドに
+private Timer timer;
+コンストラクタに
+this.timer = new Timer(繰り返す時間(ミリ), this);
+
+タイマーをスタートさせる
+this.timer.start();
+
+タイマーをストップさせる
+this.timer.stop();
+
+タイマーをリスタートさせる
+this.timer.restart();
