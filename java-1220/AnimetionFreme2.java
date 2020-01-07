@@ -18,8 +18,15 @@ public class AnimetionFreme2 extends JFrame implements ActionListener {
 		tracker = new MediaTracker(this);
 		for (int i = 0; i < 4; i++){
 			man_array[i] = tk.getImage("man" + i + ".png");
-			tracker.addImage(man_array[i], i);
+			this.tracker.addImage(man_array[i], i);
 		}
+
+		try {
+			this.tracker.waitForAll();
+			System.out.println("MediaTracker_ok");
+		}catch (InterruptedException e) {
+		}
+
 
 		this.mp = new AnimetionPanel2(man_array);
 
@@ -28,14 +35,8 @@ public class AnimetionFreme2 extends JFrame implements ActionListener {
 		image.add(this.mp);
 
 		getContentPane().add(image);
-	}
 
-	public void start(){
-			try {
-				tracker.waitForAll();
-			}catch (InterruptedException e) {
-			}
-		}
+	}
 
 	public void actionPerformed(ActionEvent e) {
 	    this.mp.repaint();
