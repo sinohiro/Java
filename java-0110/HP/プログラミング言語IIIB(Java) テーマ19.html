@@ -1,0 +1,230 @@
+<!--?xml version="1.0" encoding="utf-8"?-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>プログラミング言語IIIB(Java) テーマ19</title>
+<link rel="stylesheet" href="%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9EIIIB(Java)%20%E3%83%86%E3%83%BC%E3%83%9E19_files/tenmo2008single.css" type="text/css" media="all">
+</head>
+
+<body>
+
+<h2>プログラミング言語IIIB(Java) テーマ19</h2>
+
+<h3>Javaアプレット</h3>
+
+<p>JavaのGUIプログラムには, これまで作成してきた様な単独で動作するアプリケーションと, ウェブブラウザ内で動作する<em>アプレット</em>の2種類がある. 今回は, アプリケーションとして作成したGUIプログラムをアプレットに<em>変更</em>する方法を学習する.</p>
+
+<p><font size="-1">[知識] アプレットはウェブサーバーからユーザーのPCへダウンロードされた後, ユーザー側のPC(クライアントサイド)で動作するソフトウェアである. そのため, セキュリティコントロール機能によりファイルの読み書きやネットワークによる通信などの面で様々な<em>制約</em>を受ける. ファイル改竄や情報流出等の悪意を持ったアプレットを防ぐためである.</font></p>
+
+<p>※さらに2020年現在, より一層のセキュリティ強化のため, Firefox等の最新版ブラウザでのアプレット実行は不可能となっている. アプレット専用の簡易ブラウザである<code>appletviewer</code>や, アプレット専用のランチャーを用意しているので, そちらからアプレットを起動して欲しい.</p>
+
+<!--
+<h3>Javaアプレットの実行環境の準備</h3>
+
+<p>すでにJavaアプレットを実行できる環境となっているはずである. 以下の各サンプルページを開き, Javaアプレットを正常に実行できることを確認せよ.</p>
+
+<p>※Linuxでセキュリティのため実行の可否を問われた場合は「Yes」「Proceed」を押す. 初回起動時は時間がかかります.</p>
+
+<ul>
+<li><a href="sample1/IconApplet.html">サンプル1</a> (アイコン付きボタン)</li>
+<li><a href="sample2/JankenApplet.html">サンプル2</a> (ジャンケンゲーム)</li>
+<li><a href="sample3/MyApplet.html">サンプル3</a> (アニメーション)</li>
+</ul>
+-->
+
+<h3>アプリケーションからアプレットへの変更方法</h3>
+
+<p>以下に, アプリケーションとして作成したGUIプログラムをアプレットへ変更する手順を示す.<!-- サンプルのページから各ソースにもリンクしてあるので, それらのソースも参考にして欲しい.--></p>
+
+<ol>
+
+<li>自作<em>フレーム</em>クラスのスーパークラスを, <code>JFrame</code>から<code class="em">JApplet</code>に変更する. <code>ActionListener</code>などのインターフェースはそのままで良い.</li>
+
+<li>自作<em>フレーム</em>クラスのコンストラクタを<code class="em">init</code>メソッドに変更する. アプレットが埋め込まれたHTMLファイルがロードされると, アプレット中の<code>init</code>メソッドが最初に自動的に呼び出される. 従来コンストラクタで行っていたこと(GUI部品の生成や配置等)は, この<code>init</code>メソッドの中で実行する. <!--<code>init</code>メソッドのUML表記は以下の通りである. <code class="em">void</code>に注意せよ. --></li>
+<!--
+<pre>
++init(): void
+</pre>
+-->
+<pre>public void init()
+{
+    // super(); もしこれがあればコメントにする
+    その他にコンストラクタで行っていた内容はそのままここに
+}
+</pre>
+
+<li><code class="em">main</code>メソッドを<em>コメント</em>アウトする.<!-- アプレットのインスタンスはウェブブラウザのJavaプラグインが生成するため, <code>main</code>メソッドは使用できない.--> 従来<code>main</code>メソッド内で行っていたウィンドウの大きさや位置などの設定は, 手順5でHTMLファイルで指定する.</li>
+
+<pre>/*
+    public static void main(String[] args) { ... }
+*/
+</pre>
+
+<li><em>画像ファイル</em>などの補助ファイル(<em>リソース</em>と呼ぶ)が必要な場合は, 以下の様に<code class="em">URL</code>クラスと<code class="em">class.getResource</code>メソッドを使う様に修正する.</li>
+<pre>// URLクラス用にインポート文を追加
+import java.net.*;
+</pre>
+
+<pre>// ---- アニメーション用画像の場合 ----
+// MyApplet.classと同じ場所にあるenemy.pngのURLを得る.
+URL url = MyApplet.class.getResource("enemy.png");
+
+// そのURLから画像を取得してインスタンスを生成する. 
+Image enemy = super.getImage(url); // getImageはJAppletで予め用意されているメソッド
+</pre>
+
+<pre>// ---- アイコンボタンの場合 ----
+// IconApplet.classと同じ場所にあるjavalogo.gifのURLを得る.
+URL url = IconApplet.class.getResource("javalogo.gif");
+
+// そのURLから画像を取得してインスタンスを生成する. 
+ImageIcon icon = new ImageIcon(url);
+</pre>
+
+<li>アプレットを埋め込んだ<em>HTML</em>ファイルを作る. クラスファイル名には<code>JApplet</code>を継承したクラスの<em>クラスファイル</em>名(<code class="em">○○.class</code>)を指定する. ソースファイルではないので注意せよ.</li>
+<pre>&lt;applet code="クラスファイル名" width="幅" height="高さ"&gt;&lt;/applet&gt;
+</pre>
+
+</ol>
+
+<center>
+<img src="%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9EIIIB(Java)%20%E3%83%86%E3%83%BC%E3%83%9E19_files/applet.png"><br>
+<font size="-1">図: アプリケーションからアプレットへの変更に必要な作業</font>
+</center>
+
+<h3>appletviewer</h3>
+
+<p>自作アプレットの<!--動作確認は当然ウェブブラウザでできるが, -->開発中は, アプレット専用の簡易ブラウザである<code class="em">appletviewer</code>を用いる<!--と, 高速で, より快適である-->. <code>appletviewer</code>の引数には<em>HTML</em>ファイルを指定する.</p>
+<pre>$ appletviewer index.html
+</pre>
+
+<!--
+<p>アドバイス: Firefoxのキャッシュはかなりしつこく, ソースを修正して再コンパイルしても反映しない場合があるため, 開発中は<code>appletviewer</code>での動作テストを勧める. <code>appletviewer</code>で正常動作することが確認できてから, Firefoxで確認すると良い.</p>
+-->
+
+<h3>JARファイル</h3>
+
+<p>アニメーションを行う場合等, 大量のリソースを用いるアプレットを作成する場合は, ネットワークやウェブサーバーへの負荷を軽減するために, <em>JARファイル</em>へのアーカイブ化を行う.</p>
+
+<p><font size="-1">[知識] JARファイルを用いると, 多数のファイルを一つのアーカイブファイルにまとめられるため転送が容易になる上, 同時にZIP形式による<em>ファイル圧縮</em>も行われるため, 転送時間も高速になるという利点もある.</font></p>
+
+<p>JARファイルの作成には<code class="em">jar</code>コマンドを用いる. <code>jar</code>コマンドの使い方は, UNIX(Linux, MacOSを含む)の標準アーカイブコマンドである<code>tar</code>とほぼ同様であるため, UNIXユーザーには利用が容易である.</p>
+
+<pre>*.classと*.gifをまとめてsample1.jarを作成(create)するには
+$ jar vcf sample1.jar *.class *.gif
+</pre>
+
+<pre>sample1.jarに含まれるファイルの一覧を表示するには
+$ jar vtf sample1.jar
+</pre>
+
+<p>JARファイルでアプレットを公開する際は, このように作成した<em>JARファイル</em>と<em>HTMLファイル</em>のみを, 各自のウェブ公開用ディレクトリに置く. また, アプレットを埋め込んだHTMLファイルには, クラスファイル名に加えて, <em>JARファイル</em>のファイル名も指定する.</p>
+<pre>&lt;applet code="クラスファイル名" archive="JARファイル名" width="幅" height="高さ"&gt;&lt;/applet&gt;
+</pre>
+
+<center>
+  <img src="%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9EIIIB(Java)%20%E3%83%86%E3%83%BC%E3%83%9E19_files/jar_file.png"><br>
+  <font size="-1">図: 複数のファイルをまとめてJARファイル化し, JARファイルのみを置く</font>
+</center>
+
+<!--
+     <ul>
+     <li><a href="sample1jar/IconApplet.html">サンプル1</a> (アイコン付きボタンJARファイル版)</li>
+     <li><a href="sample2jar/JankenApplet.html">サンプル2</a> (ジャンケンゲームJARファイル版)</li>
+     <li><a href="sample3jar/MyApplet.html">サンプル3</a> (アニメーションJARファイル版)</li>
+     </ul>
+-->
+
+<h3>課題</h3>
+
+<!-- <p>以下の課題のレポートは, レポートファイル<code class="em">report18.txt</code>を作成してアップロードにより提出すること. レポートファイルの1行目には<em>出席番号・名前・回</em>を忘れずに記入すること.</p> -->
+
+<p>今回は自作アプレットを含む<u>ウェブページの作成</u>をもって提出とする. 前回のテーマ18で提出したアニメーションをアプレット化せよ. テーマ18のアニメーションにさらに改良を加えても良いが, <u>そのままアプレット化</u>するだけで十分である. 以下の条件を満たす様に作成すること. ファイル名やディレクトリ名に不備があると自動回収が不可能となり, その結果, 評価もゼロとなるため, 良く確認すること.</p>
+
+<!--
+<p><em>[救済措置]</em> テーマ18以前のGUI課題いずれかのアプレット化でも合格とする(ただし低評価). 例えばテーマ12のアプレット化なら全員できるはず.</p>
+-->
+
+<ul>
+<li>アプレットを置く場所(公開用ディレクトリ)は <code class="em">~/public_html/applet/20200110</code> とする.</li>
+<li>HTMLファイルの名前は <code class="em">index.html</code> とする.</li>
+  <ul>
+  <li>ページの最初に<em>出席番号・名前・テーマ番号</em>を記入する.</li>
+  <li>自動回収の都合上, 複数のHTMLファイルには分割せず, <code>index.html</code> のみで作成して欲しい.</li>
+  <li>CSSやJavascriptを使用しても良いが, 別ファイルの場合回収は保証できないので, <u>埋め込み</u>を推奨する.</li>
+  </ul>
+<li>ソースファイルを閲覧できるようにする.</li>
+  <ul>
+  <li><code>index.html</code> と同じ場所に置き, <code>index.html</code> からリンクする.<!-- (サンプル参照)--></li>
+  </ul>
+<li>アプレットは<em>JAR形式</em>とする.</li>
+  <ul>
+  <li>JARファイルのファイル名は「<em>ユーザーID</em><code class="em">.jar</code>」とする.</li>
+  <li>ヒント: 開発中は従来通り各自の課題遂行用ディレクトリで作業し, <code>appletviewer</code> で動作確認を行い, <u>完成後に</u>JARファイル化して, もう一度 <code>appletviewer</code> で動作確認を行った後, 公開用ディレクトリへコピーして<u>リリース</u>すると良い.</li>
+  </ul>
+<li><em>[注意]</em> クラスファイルや画像ファイルを, 直接, 公開用ディレクトリに置かないこと.</li>
+  <ul>
+  <li>クラスファイルや画像ファイルはJARファイルの中に含める.</li>
+  <li>直接置いていないことを証明するため, <code>index.html</code> に意図的なリンク切れリンクを含めること.<!-- (サンプル参照)--></li>
+  </ul>
+<li>完成後のディレクトリ構成の例:</li>
+<pre>~/public_html/applet/20200110/ の直下に
+         index.html     (ここから各ファイルへリンクする)
+         MyApplet.java  (閲覧用)
+         MyPanel.java   (閲覧用)
+         p160001.jar    (この中にクラスファイルと画像ファイルを入れる)
+</pre>
+<li><code>index.html</code> に解説を記入する.</li>
+  <ul>
+  <li>ユーザー向け解説 ... 操作方法の説明やセールスポイント等.</li>
+  <li>開発者向け解説 ... ソース閲覧者に対する説明や工夫した点, 将来さらに改良する際に注意すべき点等.</li>
+  <li>時短のため, 前回までのレポートファイルから流用して良い.</li>
+  </ul>
+  <li>作成したウェブページを他のユーザーが閲覧できることを, 友人に確認してもらう.<!-- (リンク集参照)--></li>
+  <li><em>[注意]</em> JABEE成績保管のため, 今回作成したウェブページは少なくとも年度末(3/31)までは消去せずに残しておくこと.</li>
+  <li>主な評価項目</li>
+  <ol>
+    <li>(まずアプレットが動作することが前提)</li>
+    <!-- <li>ディレクトリ構成・リンク</li> -->
+    <li>ユーザー向け解説</li>
+    <li>開発者向け解説</li>
+    <!-- <li>動作の複雑さ(座標変化, 状態変化, 操作可能性等)</li> -->
+    <li>ソースファイルへのリンク</li>
+    <li>クラスファイルや画像ファイルを直接置いていないことを証明するための, 意図的リンク切れリンク</li>
+    </ol>
+</ul>
+
+<h3>レポート</h3>
+
+<ul>
+<li>内容 ... 課題中に指示されている通り.</li>
+<li><!--締切 ... 1月22日(月)17:00<br />--><em>[注意]</em> 今回の課題とは別にテーマ20(最終課題)もあるため, ここで締切りを過ぎてまで超大作を作る必要はない. <u>テーマ19は早めに切り上げて</u>, テーマ20へ進もう.</li>
+</ul>
+
+<h3>ヘルプとアドバイス</h3>
+
+<ul>
+
+<!--<li><em>救済措置</em>: テーマ18のアニメーションが完成していない人は, テーマ12/13/14などの基本的なGUIアプリケーションをアプレット化しても合格とする(ただし低評価).</li>-->
+
+<li>うまく動かない場合のチェックポイント:</li>
+  <ul>
+  <li>そもそもjavacでコンパイルしたか?</li>
+  <li>クラスファイルや画像ファイルなど, 必要なファイルが全てJARファイルの中に入っているか?</li>
+  <!-- <li>サンプル中のMyAppletやJankenAppletなどを自分のプログラム名に変更したか?</li> -->
+  </ul>
+
+<li>今回の課題はUNIXリテラシー能力が求められる. 不確かな場合は低学年の実験課題等を参照して良く復習すること.</li>
+
+<!--
+<li>ファイルはあるはずなのに「Access forbidden error」や「Class not found error」となる場合は, ファイルのパーミッション(アクセス許可情報)が疑わしい. その場合は以下のコマンドで他のユーザーも閲覧できるように公開設定してみよう. JARファイルの中に入れるファイル, JARファイルそのもの, HTMLファイル等, すべてに設定する.</li>
+<pre>
+$ chmod go+r ファイル名
+</pre>
+-->
+
+</ul>
+
+
+
+</body></html>
