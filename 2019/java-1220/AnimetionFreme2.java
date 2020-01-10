@@ -12,7 +12,7 @@ public class AnimetionFreme2 extends JFrame implements ActionListener {
 	public AnimetionFreme2() {
 		super();
 		Toolkit tk = Toolkit.getDefaultToolkit();
-		this.timer = new Timer(200, this);
+		this.timer = new Timer(100, this);
 		this.timer.start();
 		Image[] man_array = new Image[4];
 		tracker = new MediaTracker(this);
