@@ -12,9 +12,10 @@ public class AnimetionFreme2 extends JFrame implements ActionListener {
 	public AnimetionFreme2() {
 		super();
 		Toolkit tk = Toolkit.getDefaultToolkit();
+		Image[] man_array = new Image[4];
+		this.mp = new AnimetionPanel2(man_array);
 		this.timer = new Timer(100, this);
 		this.timer.start();
-		Image[] man_array = new Image[4];
 		tracker = new MediaTracker(this);
 		for (int i = 0; i < 4; i++){
 			man_array[i] = tk.getImage("man" + i + ".png");
@@ -28,7 +29,6 @@ public class AnimetionFreme2 extends JFrame implements ActionListener {
 		}
 
 
-		this.mp = new AnimetionPanel2(man_array);
 
 		JPanel image = new JPanel();
 		image.setLayout(new BoxLayout(image, BoxLayout.PAGE_AXIS));
