@@ -1,0 +1,205 @@
+<!--?xml version="1.0" encoding="utf-8"?-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>プログラミング言語IIIB(Java) テーマ20</title>
+<link rel="stylesheet" href="%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9EIIIB(Java)%20%E3%83%86%E3%83%BC%E3%83%9E20_files/tenmo2008single.css" type="text/css" media="all">
+</head>
+
+<body>
+
+<h2>プログラミング言語IIIB(Java) テーマ20</h2>
+
+<h3>MVCモデル</h3>
+
+<p>MVCモデルは, オブジェクト指向プログラミング(OOP; Object-Oriented Programming)において<em>クラス分割</em>を行う際に基準となる考え方である. MVCモデルではプログラム全体を以下の三つの役割のクラスに分割して作成する. (もちろん更に細かく分割しても良い. )</p>
+
+<ul>
+<li>モデル(Model) ... データの<em>保存</em>や<em>計算</em>を担当する.</li>
+<li>ビュー(View) ... データの<em>表示</em>を担当する. (プログラミング言語IIIBでは描画パネルに相当)</li>
+<li>コントローラー(Controller) ... モデルとビューの<em>制御</em>を担当する. (プログラミング言語IIIBではフレームに相当)</li>
+</ul>
+
+<center>
+<img src="%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E8%A8%80%E8%AA%9EIIIB(Java)%20%E3%83%86%E3%83%BC%E3%83%9E20_files/mvc.png"><br>
+<font size="-1">図: MVCモデル</font>
+</center>
+
+<p>MVCに分割してプログラムを作成することで各部分の独立性を高められ, 大規模なソースの見通しが良くなると共に, 更新や再利用等の管理も容易になるメリットがある.</p>
+
+<h3>課題</h3>
+
+<p>これまでの多数の課題遂行により得られた知識に基づき, 自由にJavaアプレットを作成せよ. ただし, 以下の条件を満たす様に作成すること.</p>
+
+<ul>
+
+<!--
+<li>放物運動や自由落下, 慣性, 回転, 加減速など, 何らかの<em>動き</em>を取り入れること. 必ずしも現実の物理法則通りに計算する必要はないが, 少なくとも速度ベクトル(速度の<em>大きさ</em>や<em>向き</em>)を変化させること. つまり, 等速直線運動では不十分である.</li>
+-->
+
+<li><em>[重要]</em> クラスは<em>MVCモデル</em>に従って<em>三つ</em>に分割すること. (三つ以上でも良い. )<!--例えば, 放物運動を用いて大砲シミュレーションを作る場合, クラス分割は以下の様になる. [<a href="sample.html">サンプルソース</a>]--></li>
+
+<!--
+    <ul>
+    <li>砲弾クラス(Model) ... 砲弾の放物運動の計算を担当する.</li>
+        <p><code>setV0(), setTheta(), setTime(), getX(), getY()</code>等 → 各種パラメータをセットしておくと, 計算された座標をゲッターで取り出せる.</p>
+    <li>パネルクラス(View) ... 砲弾の描画を担当する.</li>
+        <p><code>setBallX(), setBallY(), paintComponent()</code>等 → 砲弾の座標をセットして<code>repaint</code>をかけると, ウィンドウ上の適切な位置に砲弾が描画される.</p>
+    <li>アプレットクラス(Controller) ... GUIコンポーネントの生成や配置, イベント処理等を担当する. → 砲弾クラスに計算を依頼し, パネルにその計算結果の描画を依頼する. プログラム全体の統制を取る.</li>
+    </ul>
+-->
+
+<!--
+<li>タイマーはViewまたはControllerのどちらに付けても良い事とする.</li>
+    <ul>
+    <li>前回までと同様にアニメパネルとして考えたい(そのまま流用したい)ならばViewに付ける.</li>
+    <li>時間も制御のうちと考えるならばControllerである. (推奨)</li>
+    </ul>
+-->
+
+<!--
+<li>時間も制御のうちと考え, タイマーはControllerに付けること. (前回までのアニメパネルとは異なるので注意)</li>
+-->
+
+<li><em>[重要]</em> 各クラスに<!--必要に応じて-->コンストラクタ/ゲッター/セッターを用意し, インスタンス間で<em>データの受け渡し</em>を行うこと. 抜け穴となる<code>public</code>フィールドや, そもそもインスタンスが不要となる<code>static</code>フィールドは原則として禁止する. (<!-- <code>public static final</code>による -->定数定義に限り可とする.→使い方は後述)</li>
+
+<hr>
+
+<li>アプレットを置く場所(公開用ディレクトリ)は <code class="em">~/public_html/applet/20200122</code> とする.</li>
+<li>HTMLファイルの名前は <code class="em">index.html</code> とする.</li>
+    <ul>
+    <li>ページの最初に<em>出席番号</em>・<em>名前</em>・<em>テーマ番号</em>を記入する.</li>
+    <li>自動回収の都合上, 複数のHTMLファイルには分割せず, <code>index.html</code> のみで作成して欲しい.</li>
+    <li>CSSやJavascriptを使用しても良いが, 別ファイルの場合回収は保証できないので, <u>埋め込み</u>を推奨する.</li>
+    </ul>
+<li>ソースファイルを閲覧できるようにする.</li>
+    <ul>
+    <li><code>index.html</code> と同じ場所に置き, <code>index.html</code> からリンクする.</li>
+    </ul>
+<li>アプレットは<em>JAR形式</em>とする.</li>
+    <ul>
+    <li>JARファイルのファイル名は「<em>ユーザーID</em><code class="em">.jar</code>」とする.</li>
+    <li>ヒント: 開発中は従来通り各自の課題遂行用ディレクトリで作業し, <code>appletviewer</code> で動作確認を行い, <u>完成後に</u>JARファイル化して, もう一度 <code>appletviewer</code> で動作確認を行った後, 公開用ディレクトリへコピーして<u>リリース</u>すると良い.</li>
+    </ul>
+    <li><em>[注意]</em> クラスファイルや画像ファイルを, 直接, 公開用ディレクトリに置かないこと.</li>
+    <ul>
+    <li>クラスファイルや画像ファイルはJARファイルの中に含める.</li>
+    <li>直接置いていないことを証明するため, <code>index.html</code> に意図的なリンク切れリンクを含めること.</li>
+    </ul>
+<li>完成後のディレクトリ構成の例:</li>
+<pre>~/public_html/applet/20200122/ の直下に
+         index.html    (ここから各ファイルへリンクする)
+         MyApplet.java (閲覧用)
+         MyPanel.java  (閲覧用)
+         MyModel.java  (閲覧用)
+         p160001.jar   (この中にクラスファイルと画像ファイルを入れる)
+</pre>
+<li><code>index.html</code> に解説を記入する.</li>
+    <ul>
+    <li>ユーザー向け解説 ... 操作方法の説明やセールスポイント等.</li>
+    <li>開発者向け解説 ... ソース閲覧者に対する説明や工夫した点, 将来さらに改良する際に注意すべき点等.</li>
+    <li><em>[今回の重要ポイント]</em> どの様に<em>クラス分割</em>を行ったか. 何のデータを, いつ(どのタイミングで), どの様に, どのクラスからどのクラスへ, 受け渡ししているか.</li>
+    <li><a href="http://jsuri1.info.kushiro-ct.ac.jp/~tenmo/java/19/">テーマ19</a>のアプレットを元に更に改良を行った場合は, その<em>改良点</em>を明記すること.</li>
+    <li>時短のため, 前回までのレポートファイルから流用しても良い.</li>
+    </ul>
+    <li><em>[注意]</em> JABEE成績保管のため, 今回作成したウェブページは少なくとも年度末(3/31)までは消去せずに残しておくこと.</li>
+    <li>主な評価項目</li>
+    <ol>
+      <li>(まずはアプレットが動作することが前提)</li>
+      <li>ユーザー向け解説</li>
+      <li>開発者向け解説 + クラス分割(各クラスの役割, クラス間での情報のやり取り)</li>
+      <li>ソースファイルへのリンク</li>
+      <li>クラスファイルや画像ファイルを直接置いていないことを証明するための, 意図的リンク切れリンク</li>
+     <!--<li>動作の複雑さ(座標変化, 状態変化, 操作可能性等)</li>-->
+    </ol>
+</ul>
+
+<h3>レポート</h3>
+
+<ul>
+<li>内容 ... 課題中に指示されている通り.</li>
+<!--
+<li>締切スケジュール</li>
+    <ul>
+    <li>事前確認のための締切: 1月30日(火) 授業終了時</li>
+    <li>2月6日(火)プログラミング言語III最終回にて不備を指摘・解説</li>
+    <li>最終締切: 2月8日(木) この日まで更新可</li>
+    </ul>
+-->
+</ul>
+
+<h3>ヘルプとアドバイス</h3>
+
+<ul>
+
+<li>デバッグの基本はデバッグプリントである. 随所に<code class="em">System.out.println</code>を挿入し, その行を<em>通過</em>していることや, <em>変数の値</em>が期待通りになっていることを確認せよ. 端末ではなく描画パネルに変数の値を随時表示(描画)しても良い.</li>
+<pre>System.out.println("x=" + x + " y=" + y); // 起動した端末へ表示
+</pre>
+<pre>g.drawString("x=" + x + " y=" + y, 16, 16); // アプレットの描画パネルに表示(描画)
+</pre>
+
+<li><code>int型</code>や<code>double型</code>の変数をコンストラクタ/ゲッター/セッターで受け渡しできるのと同様に, フレームや描画パネル, モデルクラス等の<em>オブジェクト変数</em>も受け渡しできる.</li>
+<pre>// 例: 描画パネルからフレームを逆参照したい場合
+public class MyFrame extends JFrame
+{
+    private MyPanel panel;
+    public MyFrame()
+    {
+        this.panel = new MyPanel(this); // 描画パネルのコンストラクタにthisを渡す
+    }
+}
+public class MyPanel extends JPanel
+{
+    private MyFrame frame;         // 逆参照用のフィールド
+    public MyPanel(MyFrame frame)  // 描画パネルのコンストラクタで上記のthisを受け取り
+    {
+        this.frame = frame;        // フィールドに(こっそり)保存しておく
+    }
+    public void method()           // フレーム側のフィールドにアクセスしたい時
+    {
+        int a = this.frame.getSomething(); // フレームに対してゲッターを呼び出す
+    }
+}
+</pre>
+
+<li>自作のクラスで<em>定数</em>を定義する場合は, 「<code>public static final 型 定数名 = 値;</code>」とする. なお, 定数名はすべて<em>大文字+アンダースコア</em>で付ける(Java標準命名規則).</li>
+<pre>public class MyFrame extends JFrame
+{
+    public static final int NUM_BALLS = 5; // ボールの個数
+}
+</pre>
+
+<li>標準ライブラリで用意されている可変長の配列を使いたい場合は<code>ArrayList</code>クラスを調べてみると良い. (同様の機能を持つ古いクラスに<code>Vector</code>クラスがあるが, 現在は利用が推奨されていない. )</li>
+
+<li><code>sin</code>関数などの数学関数は, <code>Math.sin()</code>の様に先頭に「<code class="em">Math.</code>」を付加する事で利用できる. なお, 引数の単位はラジアンである. 円周率πには定数<code class="em">Math.PI</code>を利用できる.</li>
+
+<li>動きに物理法則を組み入れる場合, 理論上の計算ではy座標は上がプラス方向で下がマイナス方向だが, <em>画面上では逆</em>に, 下がプラス方向で上がマイナス方向であることに注意せよ. なお, 描画パネル等の大きさは<code>getWidth(), getHeight()</code>で取得できる.</li>
+
+<!--
+<li>キーイベントの使用例: <a href="KeyTest1Frame.java"><code>KeyTest1Frame.java</code></a>, <a href="KeyTest1Panel.java"><code>KeyTest1Panel.java</code></a> ※MVCアプレットになっていない暫定版</li>
+-->
+
+<!--
+<h3>物体の運動</h3>
+-->
+
+<!--
+<li>アニメーションやゲームに登場する物体に物理的な<em>運動</em>を行わせるには, x座標とy座標を時刻tの関数で表し, MVCモデルの<em>M(Model)</em>にて計算を行う.</li>
+
+<p>例えば, 放物運動(斜方投射)を行う質点の座標は, 次の式で計算できる.</p>
+
+<center>
+<img src="hobutu.png"><img src="hobutsu_formula.png"><br>
+<font size="-1">図: 放物運動の計算(作図ツールの都合上, 正確な2次曲線になっていないが, 本来は2次曲線)</font>
+</center>
+
+<p>ここで, V<sub>0</sub>は初速度ベクトルの大きさ, θは初速度ベクトルとx軸の間の角度(仰角)(0＜θ≦π/2)であり, tは投げてからの経過時刻, gは重力加速度である.</p>
+
+<p>物体をこのように運動させて描画するには, <code>Timer</code>クラスを用いて時刻tを0から少しずつ増加させ, 各時点における質点の座標を計算し, その位置に物体を描画することで実現できる.</p>
+-->
+
+</ul>
+
+
+
+</body></html>
