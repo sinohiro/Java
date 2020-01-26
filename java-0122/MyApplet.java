@@ -13,12 +13,12 @@ public class MyApplet extends JApplet implements KeyListener {
 	private boolean kright;
 
 	public void init() {
-		px = 640;
-		py = 600;
-		player = getImage(getCodeBase(), "man0.png");
-		kleft = kright = false;
 		this.mp = new MyPanel();
 		this.mm = new MyModel();
+		px = 640;
+		py = 600;
+		kleft = kright = false;
+		player = mm.getPlayer();
 
 		addKeyListener(this);
 
@@ -43,8 +43,12 @@ public class MyApplet extends JApplet implements KeyListener {
 
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
-			case KeyEvent.VK_A: kleft = false; break;
-			case KeyEvent.VK_D: kright = false; break;
+			case KeyEvent.VK_A:
+				mm.setLeftmove(false);
+				break;
+			case KeyEvent.VK_D:
+				mm.setRightmove(false);
+				break;
 		}
 	}
 

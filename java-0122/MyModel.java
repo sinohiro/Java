@@ -4,15 +4,22 @@ import java.awt.Graphics;
 import java.awt.Dimension;
 import java.net.*;
 
-public class MyModel extends JApplet {
+public class MyModel {
+	//private MyPanel mp = new MyPanel();
 	private MyPanel mp;
 	private boolean kleft;
 	private boolean kright;
 	private int px = 0;
 	private int py = 0;
+	private Image player;
 
-	URL url = MyModel.class.getResource("man0.png");
-	Image player = super.getImage(url);
+	public MyModel(){
+		//URL url = MyModel.class.getResource("man0.png");
+		//player = super.getImage(url);
+		super();
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		player = tk.getImage("man0.png");
+	}
 
 	public void setLeftmove(boolean kleft){
 		if (kleft && px > 0){
@@ -30,10 +37,6 @@ public class MyModel extends JApplet {
 
 	public Image getPlayer(){
 		return this.player;
-	}
-
-	public MyModel(){
-	super();
 	}
 }
 

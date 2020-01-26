@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Dimension;
 
 public class MyPanel extends JPanel {
-	private MyModel mm;
+	private MyModel mm = new MyModel();
 	private int px = 0;
 	private int py = 0;
 
@@ -26,6 +26,6 @@ public class MyPanel extends JPanel {
 		super.paintComponent(g);
 
 		//player
-		g.drawImage(mm.getPlayer(), px, py, this);
+		g.drawImage(mm.getPlayer(), this.px, this.py, this);
 	}
 }
