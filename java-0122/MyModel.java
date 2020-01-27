@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.net.*;
 
 public class MyModel {
-	//private MyPanel mp = new MyPanel();
 	private MyPanel mp;
 	private boolean kleft;
 	private boolean kright;
@@ -17,6 +16,7 @@ public class MyModel {
 		//URL url = MyModel.class.getResource("man0.png");
 		//player = super.getImage(url);
 		super();
+		this.mp = new MyPanel();
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		player = tk.getImage("man0.png");
 	}
@@ -28,7 +28,7 @@ public class MyModel {
 		}
 	}
 
-	public void setRightmove(boolean kleft){
+	public void setRightmove(boolean kright){
 		if (kright && px < 1280){
 			px += 8;
 			mp.setPlayery(py);

@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Dimension;
 
 public class MyPanel extends JPanel {
-	private MyModel mm = new MyModel();
+	private MyModel mm;
 	private int px = 0;
 	private int py = 0;
 
@@ -17,7 +17,8 @@ public class MyPanel extends JPanel {
 	}
 
 	public MyPanel() {
-		super();
+		//super();
+		this.mm = new MyModel();
 		setBackground(Color.black);
 		setPreferredSize(new Dimension(1280, 720)); // 大きさを640x480に設定
 	}
