@@ -19,8 +19,7 @@ public class MyApplet extends JApplet implements KeyListener {
 		this.mm = new MyModel();
 		this.mp = new MyPanel(px, py);
 
-		addKeyListener(this);
-		//setFocusable(true);
+		mp.addKeyListener(this);
 
 		JPanel field = new JPanel();
 		field.setLayout(new BoxLayout(field, BoxLayout.PAGE_AXIS));
