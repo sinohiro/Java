@@ -5,8 +5,8 @@ import java.awt.Dimension;
 
 public class MyPanel extends JPanel {
 	private MyModel mm;
-	private int px = 0;
-	private int py = 0;
+	private int px;
+	private int py;
 
 	public void setPlayerx(int px){
 		this.px = px;
@@ -16,9 +16,11 @@ public class MyPanel extends JPanel {
 		this.py = py;
 	}
 
-	public MyPanel() {
+	public MyPanel(int px, int py) {
 		//super();
 		this.mm = new MyModel();
+		this.px = px;
+		this.py = py;
 		setBackground(Color.black);
 		setPreferredSize(new Dimension(1280, 720)); // 大きさを640x480に設定
 	}
@@ -28,5 +30,7 @@ public class MyPanel extends JPanel {
 
 		//player
 		g.drawImage(mm.getPlayer(), this.px, this.py, this);
+
+		requestFocusInWindow();
 	}
 }

@@ -13,14 +13,14 @@ public class MyApplet extends JApplet implements KeyListener {
 	private boolean kright;
 
 	public void init() {
-		this.mp = new MyPanel();
-		this.mm = new MyModel();
 		px = 640;
 		py = 600;
 		kleft = kright = false;
-		player = mm.getPlayer();
+		this.mm = new MyModel();
+		this.mp = new MyPanel(px, py);
 
 		addKeyListener(this);
+		//setFocusable(true);
 
 		JPanel field = new JPanel();
 		field.setLayout(new BoxLayout(field, BoxLayout.PAGE_AXIS));
@@ -32,10 +32,14 @@ public class MyApplet extends JApplet implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_A:
-				mm.setLeftmove(true);
+				System.out.println("px = " + px);
+				px = mm.getLeftmove(true, px);
+				mp.setPlayerx(px);
 				break;
 			case KeyEvent.VK_D:
-				mm.setRightmove(true);
+				System.out.println("px = " + px);
+				px = mm.getRightmove(true, px);
+				mp.setPlayerx(px);
 				break;
 		}
 		this.mp.repaint();
@@ -44,10 +48,12 @@ public class MyApplet extends JApplet implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_A:
-				mm.setLeftmove(false);
+				px = mm.getLeftmove(false, px);
+				mp.setPlayerx(px);
 				break;
 			case KeyEvent.VK_D:
-				mm.setRightmove(false);
+				px = mm.getRightmove(false, px);
+				mp.setPlayerx(px);
 				break;
 		}
 	}
