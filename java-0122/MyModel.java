@@ -9,6 +9,7 @@ public class MyModel {
 	private boolean kleft;
 	private boolean kright;
 	private Image player;
+	private Image enemy;
 
 	public MyModel(){
 		//URL url = MyModel.class.getResource("man0.png");
@@ -16,11 +17,26 @@ public class MyModel {
 		super();
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		player = tk.getImage("man0.png");
+		enemy = tk.getImage("man1.png");
 	}
 
 	public int getLeftmove(boolean kleft, int px){
 		if (kleft && px > 0){
 			px -= 8;
+		}
+		return px;
+	}
+
+	public int getRightmove(boolean kright, int px){
+		if (kright && px < 1280){
+			px += 8;
+		}
+		return px;
+	}
+
+	public int getRightmove(boolean kright, int px){
+		if (kright && px < 1280){
+			px += 8;
 		}
 		return px;
 	}
