@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.net.*;
 
 public class MyModel {
+	private int[][] PlayerBulletxy;
 	private boolean kleft;  //keyLeft
 	private boolean kright;
 	private boolean ERight; //EnemyRight
@@ -12,14 +13,15 @@ public class MyModel {
 	private boolean enemykill;
 	private Image player;
 	private Image enemy;
+	private Image bullet;
 
 	public MyModel(){
 		super();
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		player = tk.getImage("man0.png");
-		this.tracker.addImage(player, 0);
 		enemy = tk.getImage("man1.png");
-		this.tracker.addImage(enemy, 0);
+		bullet = tk.getImage("man2.png");
+		this.PlayerBulletxy = new int[2][10];
 		ELeft = false;
 		ERight = true;
 		enemykill = false;
@@ -63,11 +65,25 @@ public class MyModel {
 		return ex;
 	}
 
+	public int[][] getPlayerBulletmove(int px, int py, int BulletCount){
+		System.out.println("debug: px -> " + px);
+		System.out.println("debug: py -> " + py);
+		System.out.println("debug: BulletCount -> " + BulletCount);
+		System.out.println("debug: pbx[0][0] -> " + PlayerBulletxy[0][0]);
+		PlayerBulletxy[0][BulletCount] = px;
+		PlayerBulletxy[1][BulletCount] = py;
+		return PlayerBulletxy;
+	}
+
 	public Image getPlayer(){
 		return this.player;
 	}
 	public Image getEnemy(){
 		return this.enemy;
 	}
+	public Image getBullet(){
+		return this.bullet;
+	}
+
 }
 

@@ -11,27 +11,24 @@ public class MyApplet extends JApplet implements KeyListener, ActionListener {
 	private Image player;
 	private Timer timer;
 	private int px, py, ex, ey;
-	private boolean kleft;
-	private boolean kright;
-	private MediaTracker tracker;
+	private int pBulletx[], pBullety[];
+	private int BulletCount;
+	private boolean kleft, kright;
+	private boolean PlayerBullet;
+	private int[][] PlayerBulletxy;
 
 	public void init() {
 		px = 640;
 		py = 600;
 		ex = 20;
 		ey = 20;
+		BulletCount = 0;
 		this.kleft = this.kright = false;
-		timer = new Timer(60, this);
+		this.PlayerBullet = false;
+		this.PlayerBulletxy = new int[2][10];
+		timer = new Timer(40, this);
 		this.mm = new MyModel();
 		this.mp = new MyPanel(px, py);
-		tracker = new MediaTracker();
-
-		//mediatracker
-		try {
-			this.tracker.waitForAll();
-			System.out.println("MediaTracker_ok");
-		}catch (InterruptedException e) {
-		}
 
 		mp.addKeyListener(this);
 
@@ -52,14 +49,19 @@ public class MyApplet extends JApplet implements KeyListener, ActionListener {
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_A:
-				System.out.println("px = " + px);
 				px = mm.getLeftPmove(true, px);
 				mp.setPlayerx(px);
 				break;
 			case KeyEvent.VK_D:
-				System.out.println("px = " + px);
 				px = mm.getRightPmove(true, px);
 				mp.setPlayerx(px);
+				break;
+			case KeyEvent.VK_SPACE:
+				PlayerBulletxy = mm.getPlayerBulletmove(px, py, BulletCount);
+				mp.setPlayerBulletxy(PlayerBulletxy);
+				mp.setBulletCount(BulletCount);
+				mp.setPlayerBullet(true);
+				BulletCount += 1;
 				break;
 		}
 		this.mp.repaint();
