@@ -5,13 +5,10 @@ import java.awt.Dimension;
 
 public class MyPanel extends JPanel {
 	private MyModel mm;
-	private int px;
-	private int py;
-	private int ex;
-	private int ey;
-	private int BulletCount;
-	private int[][] PlayerBulletxy;
-	private boolean PlayerBullet;
+	private PlayerBullet[] pb;
+	private int px, py;
+	private int ex, ey;
+	private int NUM_BULLET;
 
 	public void setPlayerx(int px){
 		this.px = px;
@@ -29,16 +26,12 @@ public class MyPanel extends JPanel {
 		this.ey = ey;
 	}
 
-	public void setBulletCount(int BulletCount){
-		this.BulletCount = BulletCount;
+	public void setPlayerBullet(PlayerBullet[] pb) {
+		this.pb = pb;
 	}
 
-	public void setPlayerBulletxy(int[][] PlayerBulletxy) {
-		this.PlayerBulletxy = PlayerBulletxy;
-	}
-
-	public void setPlayerBullet(boolean PlayerBullet) {
-		this.PlayerBullet = PlayerBullet;
+	public void setNUM_BULLET(int NUM_BULLET){
+		this.NUM_BULLET = NUM_BULLET;
 	}
 
 	public MyPanel(int px, int py) {
@@ -58,9 +51,11 @@ public class MyPanel extends JPanel {
 		Toolkit.getDefaultToolkit().sync();
 		//player
 		g.drawImage(mm.getPlayer(), this.px, this.py, this);
-		if (PlayerBullet) {
-			for (int i = 0 ; i <= BulletCount ; i ++){
-				g.drawImage(mm.getBullet(), this.PlayerBulletxy[0][i], this.PlayerBulletxy[1][i], this);
+
+		//playerbullet
+		for (int i = 0; i < NUM_BULLET; i++) {
+			if (pb[i].isAlive()) {
+				pb[i].draw(g);
 			}
 		}
 
