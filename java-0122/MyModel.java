@@ -24,7 +24,6 @@ public class MyModel {
 		ELeft = false;
 		ERight = true;
 		enemykill = false;
-
 	}
 
 	public int getLeftPmove(boolean kleft, int px){
@@ -39,6 +38,20 @@ public class MyModel {
 			px += 10;
 		}
 		return px;
+	}
+
+	public int getUpPmove(boolean kright, int py){
+		if (kright && py > 360){
+			py -= 10;
+		}
+		return py;
+	}
+
+	public int getDownPmove(boolean kright, int py){
+		if (kright && py < 720 - 100){
+			py += 10;
+		}
+		return py;
 	}
 
 	public int getEmove(boolean enemykill, int ex){

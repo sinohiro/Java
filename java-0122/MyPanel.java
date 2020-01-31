@@ -47,8 +47,10 @@ public class MyPanel extends JPanel {
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
 		Toolkit.getDefaultToolkit().sync();
+
+		//borderLine
+		g.drawLine(0, 360, 1280, 360);
 		//player
 		g.drawImage(mm.getPlayer(), this.px, this.py, this);
 

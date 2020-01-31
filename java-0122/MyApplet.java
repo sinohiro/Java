@@ -7,7 +7,7 @@ import java.net.*;
 
 public class MyApplet extends JApplet implements KeyListener, ActionListener {
 
-	private static final int NUM_BULLET = 50;
+	private static final int NUM_BULLET = 100;
 
 	private MyPanel mp;
 	private MyModel mm;
@@ -16,6 +16,11 @@ public class MyApplet extends JApplet implements KeyListener, ActionListener {
 	private Timer timer;
 	private int px, py, ex, ey;
 	private boolean kleft, kright;
+	private boolean isLeft;
+	private boolean isRight;
+	private boolean isUp;
+	private boolean isDown;
+	private boolean isShot;
 
 	public void init() {
 		px = 640;
@@ -23,6 +28,7 @@ public class MyApplet extends JApplet implements KeyListener, ActionListener {
 		ex = 20;
 		ey = 20;
 		this.kleft = this.kright = false;
+		isLeft = isRight = isUp = isDown = isShot = false;
 		timer = new Timer(40, this);
 		this.mm = new MyModel();
 		this.mp = new MyPanel(px, py);
@@ -31,6 +37,7 @@ public class MyApplet extends JApplet implements KeyListener, ActionListener {
 			pb[i] = new PlayerBullet();
 		}
 
+		mp.setPlayerBullet(pb);
 		mp.setNUM_BULLET(NUM_BULLET);
 		mp.addKeyListener(this);
 
@@ -42,7 +49,37 @@ public class MyApplet extends JApplet implements KeyListener, ActionListener {
 		getContentPane().add(field);
 	}
 
+	public void playermove() {
+		if (isLeft) {
+			px = mm.getLeftPmove(true, px);
+			mp.setPlayerx(px);
+		}
+		if (isRight) {
+			px = mm.getRightPmove(true, px);
+			mp.setPlayerx(px);
+		}
+		if (isUp) {
+			py = mm.getUpPmove(true, py);
+			mp.setPlayery(py);
+		}
+		if (isDown) {
+			py = mm.getDownPmove(true, py);
+			mp.setPlayery(py);
+		}
+		if (isShot) {
+			for (int i = 0; i < NUM_BULLET; i++) {
+				if (!pb[i].isAlive()) {
+					pb[i].set(px, py);
+					break;
+				}
+			}
+		}
+	}
+
 	public void actionPerformed(ActionEvent e) {
+		//playermove
+		playermove();
+
 		//enemymove
 		ex = mm.getEmove(false, ex);
 		mp.setEnemyx(ex);
@@ -61,20 +98,19 @@ public class MyApplet extends JApplet implements KeyListener, ActionListener {
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_A:
-				px = mm.getLeftPmove(true, px);
-				mp.setPlayerx(px);
+				isLeft = true;
 				break;
 			case KeyEvent.VK_D:
-				px = mm.getRightPmove(true, px);
-				mp.setPlayerx(px);
+				isRight = true;
+				break;
+			case KeyEvent.VK_W:
+				isUp = true;
+				break;
+			case KeyEvent.VK_S:
+				isDown = true;
 				break;
 			case KeyEvent.VK_SPACE:
-				for (int i = 0; i < NUM_BULLET; i++) {
-					if (!pb[i].isAlive()) {
-						pb[i].set(px, py);
-						break;
-					}
-				}
+				isShot = true;
 				break;
 		}
 		this.mp.repaint();
@@ -83,12 +119,19 @@ public class MyApplet extends JApplet implements KeyListener, ActionListener {
 	public void keyReleased(KeyEvent e) {
 		switch (e.getKeyCode()) {
 			case KeyEvent.VK_A:
-				px = mm.getLeftPmove(false, px);
-				mp.setPlayerx(px);
+				isLeft = false;
 				break;
 			case KeyEvent.VK_D:
-				px = mm.getRightPmove(false, px);
-				mp.setPlayerx(px);
+				isRight = false;
+				break;
+			case KeyEvent.VK_W:
+				isUp = false;
+				break;
+			case KeyEvent.VK_S:
+				isDown = false;
+				break;
+			case KeyEvent.VK_SPACE:
+				isShot = false;
 				break;
 		}
 	}
