@@ -101,6 +101,7 @@ public class MyApplet extends JApplet implements KeyListener, ActionListener {
 		for (int i = 0; i < NUM_BULLET; i++) {
 			if (pb[i].isCollision()){
 				point = mm.getPoint(point);
+				pb[i].setIsCollision(false);
 				mp.setPoint(point);
 			}
 		}

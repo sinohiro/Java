@@ -1,5 +1,4 @@
 import java.awt.*;
-
 public class PlayerBullet {
 
 	private static final int SPEED = 8;
@@ -12,6 +11,10 @@ public class PlayerBullet {
 
 	public void setEnemyx(int ex){
 		this.ex = ex;
+	}
+
+	public void setIsCollision(boolean isCollision){
+		this.isCollision = isCollision;
 	}
 
 	public PlayerBullet() {
@@ -44,7 +47,7 @@ public class PlayerBullet {
 
 	public void CollisionDetection() {
 		//if (this.x > this.ex && this.x < this.ex + 79 && this.y < 20 + 79 && this.y > 20){
-		if (isAlive == true && this.x > this.ex && this.x < this.ex + 79){
+		if (isAlive == true && this.x > this.ex && this.x < this.ex + 79 && this.y < 20){
 			System.out.println("Hit");
 			isCollision = true;
 			isAlive = false;

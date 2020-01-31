@@ -67,7 +67,7 @@ public class MyPanel extends JPanel {
 		}
 		String point = String.valueOf(this.point);
 		//Playerpoint
-		g.drawString(point, 10, 50);
+		g.drawString("Point: " + point, 10, 50);
 
 		//enemy
 		g.drawImage(mm.getEnemy(), this.ex, this.ey, this);
