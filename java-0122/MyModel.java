@@ -77,6 +77,11 @@ public class MyModel {
 		return ex;
 	}
 
+	public int getPoint(int point){
+		point += 1;
+		return point;
+	}
+
 	public Image getPlayer(){
 		return this.player;
 	}

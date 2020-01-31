@@ -6,22 +6,31 @@ public class PlayerBullet {
 
 	private MyModel mm;
 	private int x, y;
+	private int ex;
 	private boolean isAlive;
+	private boolean isCollision;
+
+	public void setEnemyx(int ex){
+		this.ex = ex;
+	}
 
 	public PlayerBullet() {
 		this.mm = new MyModel();
 		isAlive = false;
+		isCollision = false;
 	}
 
 	public boolean isAlive() {
 		return isAlive;
 	}
 
+	public boolean isCollision() {
+		return isCollision;
+	}
+
 	public void set(int x, int y) {
 		this.x = x + 79 / 2;
-		//this.x = x - 79 / 2;
 		this.y = y + SPEED;
-		//this.y = y - 100 + SPEED;
 		isAlive = true;
 	}
 
@@ -30,6 +39,17 @@ public class PlayerBullet {
 			isAlive = false;
 		} else {
 			y -= SPEED;
+		}
+	}
+
+	public void CollisionDetection() {
+		//if (this.x > this.ex && this.x < this.ex + 79 && this.y < 20 + 79 && this.y > 20){
+		if (isAlive == true && this.x > this.ex && this.x < this.ex + 79){
+			System.out.println("Hit");
+			isCollision = true;
+			isAlive = false;
+		} else {
+			isCollision = false;
 		}
 	}
 

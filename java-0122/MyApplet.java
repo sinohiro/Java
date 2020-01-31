@@ -15,6 +15,7 @@ public class MyApplet extends JApplet implements KeyListener, ActionListener {
 	private Image player;
 	private Timer timer;
 	private int px, py, ex, ey;
+	private int point;
 	private boolean kleft, kright;
 	private boolean isLeft;
 	private boolean isRight;
@@ -27,6 +28,7 @@ public class MyApplet extends JApplet implements KeyListener, ActionListener {
 		py = 600;
 		ex = 20;
 		ey = 20;
+		point = 0;
 		this.kleft = this.kright = false;
 		isLeft = isRight = isUp = isDown = isShot = false;
 		timer = new Timer(40, this);
@@ -83,11 +85,23 @@ public class MyApplet extends JApplet implements KeyListener, ActionListener {
 		//enemymove
 		ex = mm.getEmove(false, ex);
 		mp.setEnemyx(ex);
+		for (int i = 0; i < NUM_BULLET; i++) {
+			pb[i].setEnemyx(ex);
+		}
 
 		//playerbulletmove
 		for (int i = 0; i < NUM_BULLET; i++) {
 			if (pb[i].isAlive()) {
 				pb[i].move();
+				pb[i].CollisionDetection();
+			}
+		}
+
+		//playerbulletcollision
+		for (int i = 0; i < NUM_BULLET; i++) {
+			if (pb[i].isCollision()){
+				point = mm.getPoint(point);
+				mp.setPoint(point);
 			}
 		}
 		mp.setPlayerBullet(pb);

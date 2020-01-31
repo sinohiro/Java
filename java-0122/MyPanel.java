@@ -9,6 +9,7 @@ public class MyPanel extends JPanel {
 	private int px, py;
 	private int ex, ey;
 	private int NUM_BULLET;
+	private int point;
 
 	public void setPlayerx(int px){
 		this.px = px;
@@ -32,6 +33,10 @@ public class MyPanel extends JPanel {
 
 	public void setNUM_BULLET(int NUM_BULLET){
 		this.NUM_BULLET = NUM_BULLET;
+	}
+
+	public void setPoint(int point){
+		this.point = point;
 	}
 
 	public MyPanel(int px, int py) {
@@ -60,6 +65,9 @@ public class MyPanel extends JPanel {
 				pb[i].draw(g);
 			}
 		}
+		String point = String.valueOf(this.point);
+		//Playerpoint
+		g.drawString(point, 10, 50);
 
 		//enemy
 		g.drawImage(mm.getEnemy(), this.ex, this.ey, this);
